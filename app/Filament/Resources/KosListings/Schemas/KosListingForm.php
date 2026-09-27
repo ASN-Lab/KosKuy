@@ -19,11 +19,11 @@ class KosListingForm
             ->components([
                 Select::make('owner_id')
                     ->label('Pemilik')
-                    ->required()
-                    ->relationship('owner', 'name')
+                    ->relationship('owner', 'name', modifyQueryUsing: fn ($query) => $query->where('role', 'owner'))
                     ->searchable()
                     ->preload()
-                    ->modifyQueryUsing(fn ($query) => $query->where('role', 'owner')),
+                    ->required(fn () => auth()->user()?->role === 'admin')
+                    ->visible(fn () => auth()->user()?->role === 'admin'),
                 TextInput::make('title')
                     ->label('Judul Kos')
                     ->required()
@@ -48,11 +48,11 @@ class KosListingForm
                 TextInput::make('latitude')
                     ->label('Latitude')
                     ->numeric()
-                    ->decimalPlaces(8),
+                    ->extraInputAttributes(['step' => 'any']),
                 TextInput::make('longitude')
                     ->label('Longitude')
                     ->numeric()
-                    ->decimalPlaces(8),
+                    ->extraInputAttributes(['step' => 'any']),
                 Textarea::make('address')
                     ->label('Alamat')
                     ->required()

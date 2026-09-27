@@ -30,7 +30,7 @@ class KosListingsTable
                     ->searchable(),
                 TextColumn::make('price_per_month')
                     ->label('Harga/Bulan')
-                    ->formatMoney('IDR', symbol: false, decimalPlaces: 0)
+                    ->money('IDR', decimalPlaces: 0)
                     ->sortable(),
                 TextColumn::make('gender_type')
                     ->label('Gender')

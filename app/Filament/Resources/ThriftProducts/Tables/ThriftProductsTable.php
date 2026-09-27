@@ -32,7 +32,7 @@ class ThriftProductsTable
                     ->sortable(),
                 TextColumn::make('price')
                     ->label('Harga')
-                    ->formatMoney('IDR', symbol: false, decimalPlaces: 0)
+                    ->money('IDR', decimalPlaces: 0)
                     ->sortable(),
                 TextColumn::make('condition_status')
                     ->label('Kondisi'),

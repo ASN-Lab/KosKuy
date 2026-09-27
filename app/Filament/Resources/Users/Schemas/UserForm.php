@@ -27,7 +27,7 @@ class UserForm
                     ->placeholder('Contoh: 08123456789')
                     ->tel()
                     ->maxLength(20)
-                    ->pattern('^[0-9]{10,20}$'),
+                    ->regex('/^[0-9]{10,20}$/'),
                 Select::make('role')
                     ->label('Peran')
                     ->options([
@@ -41,6 +41,7 @@ class UserForm
                     ->label('Password')
                     ->password()
                     ->dehydrateStateUsing(fn ($state) => bcrypt($state))
+                    ->dehydrated(fn ($state) => filled($state))
                     ->minLength(8)
                     ->required(fn (string $context): bool => $context === 'create'),
             ]);

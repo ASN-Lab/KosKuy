@@ -41,15 +41,18 @@ class ThriftProductSeeder extends Seeder
         foreach ($products as $data) {
             $category = Category::where('name', $data['category'])->first();
 
-            $product = ThriftProduct::create([
-                'seller_id' => $seller->id,
-                'category_id' => $category->id,
-                'title' => $data['title'],
-                'description' => $data['description'],
-                'price' => $data['price'],
-                'condition_status' => $data['condition_status'],
-                'is_sold' => false,
-            ]);
+            $product = ThriftProduct::firstOrCreate(
+                ['title' => $data['title']],
+                [
+                    'seller_id' => $seller->id,
+                    'category_id' => $category->id,
+                    'title' => $data['title'],
+                    'description' => $data['description'],
+                    'price' => $data['price'],
+                    'condition_status' => $data['condition_status'],
+                    'is_sold' => false,
+                ]
+            );
         }
     }
 }

@@ -45,17 +45,22 @@ class KosListingSeeder extends Seeder
         ];
 
         foreach ($listings as $data) {
-            $kos = KosListing::create(array_merge($data, [
-                'owner_id' => $owner->id,
-                'is_available' => true,
-            ]));
+            $kos = KosListing::firstOrCreate(
+                ['title' => $data['title']],
+                array_merge($data, [
+                    'owner_id' => $owner->id,
+                    'is_available' => true,
+                ])
+            );
 
-            $facilities = ['AC', 'Wi-Fi', 'Kamar Mandi Dalam', 'Dapur'];
-            foreach (array_slice($facilities, 0, rand(2, 4)) as $facility) {
-                KosFacility::create([
-                    'kos_id' => $kos->id,
-                    'facility_name' => $facility,
-                ]);
+            if ($kos->wasRecentlyCreated) {
+                $facilities = ['AC', 'Wi-Fi', 'Kamar Mandi Dalam', 'Dapur'];
+                foreach (array_slice($facilities, 0, rand(2, 4)) as $facility) {
+                    KosFacility::create([
+                        'kos_id' => $kos->id,
+                        'facility_name' => $facility,
+                    ]);
+                }
             }
         }
     }

@@ -19,10 +19,11 @@ class ThriftProductForm
             ->components([
                 Select::make('seller_id')
                     ->label('Penjual')
-                    ->required()
                     ->relationship('seller', 'name')
                     ->searchable()
-                    ->preload(),
+                    ->preload()
+                    ->required(fn () => auth()->user()?->role === 'admin')
+                    ->visible(fn () => auth()->user()?->role === 'admin'),
                 Select::make('category_id')
                     ->label('Kategori')
                     ->required()

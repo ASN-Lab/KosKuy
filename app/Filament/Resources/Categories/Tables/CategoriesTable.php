@@ -6,7 +6,6 @@ use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
 use Filament\Tables\Columns\TextColumn;
-use Filament\Tables\Filters\SearchableFilter;
 use Filament\Tables\Table;
 
 class CategoriesTable
@@ -24,7 +23,6 @@ class CategoriesTable
                 TextColumn::make('created_at')->label('Dibuat')->dateTime('d M Y')->sortable(),
             ])
             ->filters([
-                SearchableFilter::make(),
             ])
             ->recordActions([
                 EditAction::make(),

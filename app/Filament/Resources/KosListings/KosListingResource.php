@@ -53,4 +53,15 @@ class KosListingResource extends Resource
             'edit' => EditKosListing::route('/{record}/edit'),
         ];
     }
+
+    public static function getEloquentQuery(): \Illuminate\Database\Eloquent\Builder
+    {
+        $query = parent::getEloquentQuery();
+
+        if (auth()->user()?->role === 'owner') {
+            $query->where('owner_id', auth()->id());
+        }
+
+        return $query;
+    }
 }

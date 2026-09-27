@@ -13,6 +13,7 @@ class DatabaseSeeder extends Seeder
             CategorySeeder::class,
             KosListingSeeder::class,
             ThriftProductSeeder::class,
+            ImageSeeder::class,
         ]);
     }
 }

@@ -53,4 +53,15 @@ class ThriftProductResource extends Resource
             'edit' => EditThriftProduct::route('/{record}/edit'),
         ];
     }
+
+    public static function getEloquentQuery(): \Illuminate\Database\Eloquent\Builder
+    {
+        $query = parent::getEloquentQuery();
+
+        if (auth()->user()?->role === 'owner') {
+            $query->where('seller_id', auth()->id());
+        }
+
+        return $query;
+    }
 }
