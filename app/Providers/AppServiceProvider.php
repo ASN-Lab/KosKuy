@@ -2,6 +2,11 @@
 
 namespace App\Providers;
 
+use App\Models\KosListing;
+use App\Models\ThriftProduct;
+use App\Policies\KosListingPolicy;
+use App\Policies\ThriftProductPolicy;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -19,6 +24,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        Gate::policy(KosListing::class, KosListingPolicy::class);
+        Gate::policy(ThriftProduct::class, ThriftProductPolicy::class);
     }
 }

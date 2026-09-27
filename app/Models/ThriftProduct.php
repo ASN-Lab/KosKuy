@@ -1,0 +1,30 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+
+class ThriftProduct extends Model
+{
+    protected $fillable = [
+        'seller_id', 'category_id', 'title', 'description', 
+        'price', 'condition_status', 'is_sold'
+    ];
+
+    public function seller(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'seller_id');
+    }
+
+    public function category(): BelongsTo
+    {
+        return $this->belongsTo(Category::class);
+    }
+
+    public function images(): HasMany
+    {
+        return $this->hasMany(ThriftImage::class, 'thrift_id');
+    }
+}
