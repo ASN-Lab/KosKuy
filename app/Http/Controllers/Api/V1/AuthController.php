@@ -75,7 +75,7 @@ class AuthController extends Controller
 
         $user = User::where('email', $request->email)->first();
 
-        if (!$user->can('viewAny', User::class)) {
+        if (!$user->canAccessPanel(app('filament')->getPanel('admin'))) {
             return response()->json([
                 'success' => false,
                 'message' => 'Akun Anda tidak terotorisasi untuk masuk ke sistem ini.',
