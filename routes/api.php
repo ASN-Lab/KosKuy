@@ -3,8 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\V1\KosController;
 use App\Http\Controllers\Api\V1\ThriftController;
-use App\Http\Controllers\Api\V1\CategoryController;
-use App\Http\Controllers\Api\V1\KosResourceController;
+use App\Http\Controllers\Api\V1\CategoryController;use App\Http\Controllers\Api\V1\KosResourceController;
 use App\Http\Controllers\Api\V1\ThriftProductController;
 use App\Http\Controllers\Api\V1\BookingController;
 use App\Http\Controllers\Api\V1\KosMonitoringController;
@@ -18,6 +17,7 @@ Route::prefix('v1')->group(function () {
     Route::middleware('auth:sanctum')->group(function () {
         Route::post('/logout', [AuthController::class, 'logout']);
         Route::get('/me', [AuthController::class, 'me']);
+        Route::put('/me', [AuthController::class, 'updateProfile']);
         
         Route::get('/kos', [KosController::class, 'index']);
         Route::get('/kos/{id}', [KosController::class, 'show']);
@@ -31,7 +31,8 @@ Route::prefix('v1')->group(function () {
         Route::put('/thrift/{id}', [ThriftProductController::class, 'update']);
         Route::delete('/thrift/{id}', [ThriftProductController::class, 'destroy']);
         
-        Route::get('/categories', [CategoryController::class, 'index']);
+        Route::post('/thrift/{id}/purchase', [ThriftProductController::class, 'purchase']);
+        Route::get('/my-purchases', [ThriftProductController::class, 'myPurchases']);
         
         Route::post('/bookings', [BookingController::class, 'store']);
         Route::get('/my-bookings', [BookingController::class, 'myBookings']);

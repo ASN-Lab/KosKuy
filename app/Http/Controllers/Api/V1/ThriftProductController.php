@@ -106,6 +106,28 @@ class ThriftProductController extends Controller
         ]);
     }
 
+    public function purchase(Request $request, $id)
+    {
+        $product = ThriftProduct::where('is_sold', false)->findOrFail($id);
+
+        $product->update([
+            'is_sold' => true,
+            'buyer_id' => $request->user()->id,
+        ]);
+
+        return response()->json(['success' => true, 'message' => 'Pembelian berhasil']);
+    }
+
+    public function myPurchases(Request $request)
+    {
+        $purchases = ThriftProduct::where('buyer_id', $request->user()->id)
+            ->with(['images', 'category', 'seller'])
+            ->latest()
+            ->get();
+
+        return response()->json(['success' => true, 'data' => $purchases]);
+    }
+
     public function destroy(Request $request, $id)
     {
         $product = ThriftProduct::find($id);

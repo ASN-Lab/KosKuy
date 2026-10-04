@@ -32,9 +32,17 @@ class SellerController extends Controller
             'description' => 'required|string',
             'price' => 'required|numeric|min:0',
             'condition_status' => 'required|string|max:50',
+            'images.*' => 'image|mimes:jpeg,png,jpg|max:2048',
         ]);
 
-        auth()->user()->thriftProducts()->create($data);
+        $product = auth()->user()->thriftProducts()->create($data);
+
+        if ($request->hasFile('images')) {
+            foreach ($request->file('images') as $image) {
+                $path = $image->store('thrift', 'public');
+                $product->images()->create(['image_path' => $path]);
+            }
+        }
 
         return back()->with('success', 'Produk berhasil ditambahkan.');
     }

@@ -27,7 +27,7 @@
 </div>
 
 <h2 class="text-xl font-bold mb-4">Tambah Produk Thrift Baru</h2>
-<form method="POST" action="{{ route('seller.products.store') }}" class="bg-white rounded-xl shadow-md p-6 mb-12 grid grid-cols-1 md:grid-cols-2 gap-4">
+<form method="POST" action="{{ route('seller.products.store') }}" enctype="multipart/form-data" class="bg-white rounded-xl shadow-md p-6 mb-12 grid grid-cols-1 md:grid-cols-2 gap-4">
     @csrf
     <div>
         <label class="block text-sm font-medium text-gray-700 mb-1">Kategori</label>
@@ -57,6 +57,10 @@
     <div class="md:col-span-2">
         <label class="block text-sm font-medium text-gray-700 mb-1">Deskripsi</label>
         <textarea name="description" rows="3" required class="w-full border border-gray-300 rounded-lg px-3 py-2"></textarea>
+    </div>
+    <div class="md:col-span-2">
+        <label class="block text-sm font-medium text-gray-700 mb-1">Gambar Produk</label>
+        <input type="file" name="images[]" multiple accept="image/*" class="w-full border border-gray-300 rounded-lg px-3 py-2">
     </div>
     <div class="md:col-span-2">
         <button class="bg-indigo-600 text-white px-6 py-2 rounded-lg hover:bg-indigo-700">Simpan Produk</button>

@@ -94,6 +94,37 @@ class AuthController extends Controller
         ], 200, [], JSON_UNESCAPED_SLASHES);
     }
 
+    public function updateProfile(Request $request)
+    {
+        $user = $request->user();
+
+        $data = $request->validate([
+            'name' => 'required|string|max:255',
+            'phone' => 'nullable|string|max:20',
+            'password' => 'nullable|string|min:8',
+        ]);
+
+        if (isset($data['password'])) {
+            $data['password'] = Hash::make($data['password']);
+        } else {
+            unset($data['password']);
+        }
+
+        $user->update($data);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Profil berhasil diperbarui',
+            'data' => [
+                'id' => $user->id,
+                'name' => $user->name,
+                'email' => $user->email,
+                'role' => $user->role,
+                'phone' => $user->phone,
+            ],
+        ]);
+    }
+
     public function logout(Request $request)
     {
         $request->user()->currentAccessToken()->delete();
