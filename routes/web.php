@@ -29,6 +29,9 @@ Route::middleware('auth')->prefix('student')->group(function () {
     Route::put('/profile', [StudentController::class, 'updateProfile'])->name('profile.update');
     Route::get('/bookings', [StudentController::class, 'bookings'])->name('my-bookings');
     Route::get('/purchases', [StudentController::class, 'purchases'])->name('my-purchases');
+    
+    // Booking Web Route
+    Route::post('/bookings', [App\Http\Controllers\Api\V1\BookingController::class, 'store'])->name('web.bookings.store');
 });
 
 Route::prefix('owner')->middleware(['auth', 'role:owner'])->name('owner.')->group(function () {

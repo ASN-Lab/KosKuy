@@ -45,6 +45,26 @@
             Hubungi Pemilik via WhatsApp
         </a>
         @endif
+
+        @auth
+            @if(auth()->user()->role === 'student')
+                @if($kos->is_available)
+                    <form method="POST" action="{{ route('web.bookings.store') }}">
+                        @csrf
+                        <input type="hidden" name="kos_id" value="{{ $kos->id }}">
+                        <button class="block w-full bg-indigo-600 text-white text-center py-3 rounded-lg font-semibold hover:bg-indigo-700 mt-4">
+                            Booking Kos Ini
+                        </button>
+                    </form>
+                @else
+                    <p class="text-center text-gray-400 mt-4">Kos ini sedang tidak tersedia untuk booking.</p>
+                @endif
+            @endif
+        @else
+            <a href="{{ route('login') }}" class="block w-full bg-gray-600 text-white text-center py-3 rounded-lg font-semibold hover:bg-gray-700 mt-4">
+                Login untuk Booking
+            </a>
+        @endauth
     </div>
 </div>
 @endsection

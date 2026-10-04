@@ -7,12 +7,13 @@ use App\Http\Controllers\Api\V1\CategoryController;
 use App\Http\Controllers\Api\V1\KosResourceController;
 use App\Http\Controllers\Api\V1\ThriftProductController;
 use App\Http\Controllers\Api\V1\BookingController;
+use App\Http\Controllers\Api\V1\KosMonitoringController;
 
 use App\Http\Controllers\Api\V1\AuthController;
 
 Route::prefix('v1')->group(function () {
-    Route::post('/register', [AuthController::class, 'register']);
-    Route::post('/login', [AuthController::class, 'login']);
+    Route::post('/register', [AuthController::class, 'register'])->middleware('throttle:5,1');
+    Route::post('/login', [AuthController::class, 'login'])->middleware('throttle:5,1');
 
     Route::middleware('auth:sanctum')->group(function () {
         Route::post('/logout', [AuthController::class, 'logout']);
@@ -37,5 +38,14 @@ Route::prefix('v1')->group(function () {
         Route::post('/bookings/{id}/cancel', [BookingController::class, 'cancel']);
         Route::get('/owner/bookings', [BookingController::class, 'ownerBookings']);
         Route::patch('/bookings/{id}/status', [BookingController::class, 'updateStatus']);
+
+        Route::prefix('owner/kos/{kosId}')->group(function () {
+            Route::get('/monitoring', [KosMonitoringController::class, 'show']);
+            Route::post('/rooms', [KosMonitoringController::class, 'storeRoom']);
+            Route::patch('/rooms/{roomId}', [KosMonitoringController::class, 'updateRoom']);
+            Route::delete('/rooms/{roomId}', [KosMonitoringController::class, 'deleteRoom']);
+            Route::patch('/facilities/{facilityId}', [KosMonitoringController::class, 'updateFacility']);
+            Route::get('/condition-updates', [KosMonitoringController::class, 'conditionUpdates']);
+        });
     });
 });
