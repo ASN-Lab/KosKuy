@@ -33,6 +33,7 @@ Route::middleware('auth')->prefix('student')->group(function () {
 
 Route::prefix('owner')->middleware(['auth', 'role:owner'])->name('owner.')->group(function () {
     Route::get('/dashboard', [OwnerController::class, 'dashboard'])->name('dashboard');
+    Route::get('/kos/{kos}/monitoring', [OwnerController::class, 'monitoring'])->name('kos.monitoring');
     Route::post('/rooms', [OwnerController::class, 'storeRoom'])->name('rooms.store');
     Route::patch('/rooms/{room}', [OwnerController::class, 'updateRoom'])->name('rooms.update');
     Route::delete('/rooms/{room}', [OwnerController::class, 'deleteRoom'])->name('rooms.delete');

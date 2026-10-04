@@ -21,6 +21,14 @@ class OwnerController extends Controller
         return view('owner.dashboard', compact('kosListings', 'bookings'));
     }
 
+    public function monitoring(KosListing $kos)
+    {
+        $this->authorizeOwner($kos);
+        $kos->load(['rooms', 'facilities.lastUpdater', 'conditionUpdates.updater']);
+
+        return view('owner.monitoring', compact('kos'));
+    }
+
     public function storeRoom(Request $request)
     {
         $data = $request->validate([
@@ -49,7 +57,9 @@ class OwnerController extends Controller
             'is_occupied' => 'sometimes|boolean',
         ]);
 
-        $data['is_occupied'] = filled($data['tenant_name'] ?? null) || ($data['is_occupied'] ?? $room->is_occupied);
+        $data['is_occupied'] = $request->has('is_occupied')
+            ? $request->boolean('is_occupied')
+            : filled($data['tenant_name'] ?? null);
         $room->update($data);
 
         return back()->with('success', 'Kamar diperbarui.');
