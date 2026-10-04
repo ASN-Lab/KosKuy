@@ -12,10 +12,16 @@ class SellerController extends Controller
     public function dashboard()
     {
         $user = auth()->user();
-        $products = $user->thriftProducts()->with(['category', 'images'])->latest()->get();
+        $products = $user->thriftProducts()->with(['category', 'images', 'buyer'])->latest()->get();
         $categories = Category::all();
 
-        return view('seller.dashboard', compact('products', 'categories'));
+        $stats = [
+            'total_products' => $products->count(),
+            'total_sold' => $products->where('is_sold', true)->count(),
+            'total_revenue' => $products->where('is_sold', true)->sum('price'),
+        ];
+
+        return view('seller.dashboard', compact('products', 'categories', 'stats'));
     }
 
     public function store(Request $request)
