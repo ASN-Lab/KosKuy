@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Web;
 use App\Http\Controllers\Controller;
 use App\Models\Booking;
 use App\Models\KosFacility;
+use App\Models\KosListing;
 use App\Models\KosRoom;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -54,12 +55,10 @@ class OwnerController extends Controller
         $data = $request->validate([
             'room_name' => 'required|string|max:255',
             'tenant_name' => 'nullable|string|max:255',
-            'is_occupied' => 'sometimes|boolean',
+            'is_occupied' => 'sometimes',
         ]);
 
-        $data['is_occupied'] = $request->has('is_occupied')
-            ? $request->boolean('is_occupied')
-            : filled($data['tenant_name'] ?? null);
+        $data['is_occupied'] = $request->has('is_occupied');
         $room->update($data);
 
         return back()->with('success', 'Kamar diperbarui.');
