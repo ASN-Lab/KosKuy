@@ -75,7 +75,7 @@ class AuthController extends Controller
 
         $user = User::where('email', $request->email)->first();
 
-        if (!$user->canAccessPanel(app('filament')->getPanel('admin'))) {
+        if (!in_array($user->role, ['admin', 'owner', 'seller', 'student'])) {
             return response()->json([
                 'success' => false,
                 'message' => 'Akun Anda tidak terotorisasi untuk masuk ke sistem ini.',
@@ -88,10 +88,10 @@ class AuthController extends Controller
             'success' => true,
             'message' => 'Login berhasil',
             'data' => [
-                'user' => $user->load('role'),
+                'user' => $user->only(['id', 'name', 'email', 'role']),
                 'token' => $token,
             ],
-        ]);
+        ], 200, [], JSON_UNESCAPED_SLASHES);
     }
 
     public function logout(Request $request)
