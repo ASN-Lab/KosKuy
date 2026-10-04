@@ -29,5 +29,25 @@ class UserSeeder extends Seeder
                 'role' => 'owner',
             ]
         );
+
+        User::updateOrCreate(
+            ['email' => 'asn.labs1210@gmail.com'],
+            [
+                'name' => 'Aldiyan Setyo Nugroho',
+                'password' => Hash::make('student123'),
+                'phone' => '0895326651161',
+                'role' => 'student',
+            ]
+        );
+
+        User::updateOrCreate(
+            ['email' => 'refasya.audrey.mukhni@students.untidar.ac.id'],
+            [
+                'name' => 'Refasya Audrey M',
+                'password' => Hash::make('student123'),
+                'phone' => '085260851563',
+                'role' => 'student',
+            ]
+        );
     }
 }

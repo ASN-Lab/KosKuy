@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use Filament\Auth\Http\Responses\Contracts\LogoutResponse;
+use App\Http\Responses\FilamentLogoutResponse;
 use App\Models\KosListing;
 use App\Models\ThriftProduct;
 use App\Policies\KosListingPolicy;
@@ -16,7 +18,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        //
+        $this->app->bind(LogoutResponse::class, FilamentLogoutResponse::class);
     }
 
     /**

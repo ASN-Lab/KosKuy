@@ -27,4 +27,19 @@ class KosListing extends Model
     {
         return $this->hasMany(KosImage::class, 'kos_id');
     }
+
+    public function rooms(): HasMany
+    {
+        return $this->hasMany(KosRoom::class, 'kos_id');
+    }
+
+    public function conditionUpdates(): HasMany
+    {
+        return $this->hasMany(KosConditionUpdate::class, 'kos_id');
+    }
+
+    public function bookings(): HasMany
+    {
+        return $this->hasMany(Booking::class, 'kos_id');
+    }
 }
