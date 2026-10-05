@@ -25,8 +25,18 @@ class UserSeeder extends Seeder
             [
                 'name' => 'Pemilik Kos Maju Jaya',
                 'password' => Hash::make('owner123'),
-                'phone' => '628123456789',
+                'phone' => '08978889402',
                 'role' => 'owner',
+            ]
+        );
+
+        User::updateOrCreate(
+            ['email' => 'mahasiswa@koskuy.id'],
+            [
+                'name' => 'Rangga Pratama',
+                'password' => Hash::make('mahasiswa123'),
+                'phone' => '081377889402',
+                'role' => 'student',
             ]
         );
     }

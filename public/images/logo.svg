@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64" role="img" aria-label="KosKuy">
+  <defs>
+    <linearGradient id="k-bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#4f46e5"/>
+      <stop offset="55%" stop-color="#7c3aed"/>
+      <stop offset="100%" stop-color="#a855f7"/>
+    </linearGradient>
+  </defs>
+  <rect width="64" height="64" rx="18" fill="url(#k-bg)"/>
+  <path d="M32 13.5 15 27.2a1.6 1.6 0 0 0-.9 1.45V48a3 3 0 0 0 3 3h12.2V38.6a2.8 2.8 0 0 1 2.8-2.8h4.1a2.8 2.8 0 0 1 2.8 2.8V51H52a3 3 0 0 0 3-3V28.65a1.6 1.6 0 0 0-.9-1.45L32 13.5Z" fill="#fff" opacity=".95"/>
+  <circle cx="32" cy="21.4" r="3.1" fill="#6ee7b7"/>
+</svg>

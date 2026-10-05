@@ -2,12 +2,15 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class KosListing extends Model
 {
+    use HasFactory;
+
     protected $fillable = [
         'owner_id', 'title', 'description', 'price_per_month', 
         'gender_type', 'latitude', 'longitude', 'address', 'is_available'

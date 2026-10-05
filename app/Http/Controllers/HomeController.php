@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Category;
 use App\Models\KosListing;
 use App\Models\ThriftProduct;
 
@@ -10,7 +11,7 @@ class HomeController extends Controller
     public function index()
     {
         $kosListings = KosListing::where('is_available', true)
-            ->with(['images', 'owner'])
+            ->with(['images', 'facilities', 'owner'])
             ->latest()
             ->take(6)
             ->get();
@@ -21,6 +22,14 @@ class HomeController extends Controller
             ->take(8)
             ->get();
 
-        return view('home.index', compact('kosListings', 'thriftProducts'));
+        $categories = Category::orderBy('name')->get();
+
+        $stats = [
+            'kos' => KosListing::where('is_available', true)->count(),
+            'thrift' => ThriftProduct::where('is_sold', false)->count(),
+            'categories' => $categories->count(),
+        ];
+
+        return view('home.index', compact('kosListings', 'thriftProducts', 'categories', 'stats'));
     }
 }
