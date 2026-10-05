@@ -22,7 +22,7 @@
                         <a href="{{ route('login') }}" class="bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700">Login</a>
                     @else
                         @if (in_array(auth()->user()->role, ['owner', 'seller']))
-                            @php $dashboardUrl = auth()->user()->role === 'owner' ? '/owner/dashboard' : '/seller/dashboard'; @endphp
+                            @php $dashboardUrl = auth()->user()->role === 'owner' ? route('owner.dashboard') : route('seller.dashboard'); @endphp
                             <a href="{{ $dashboardUrl }}" class="text-gray-700 hover:text-indigo-600">Dashboard</a>
                         @endif
                         <div class="relative" x-data="{ open: false }" x-on:click.outside="open = false">
@@ -41,8 +41,6 @@
                                     <a href="{{ route('profile') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50">Profil Saya</a>
                                     <a href="{{ route('my-bookings') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50">Riwayat Booking</a>
                                     <a href="{{ route('my-purchases') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50">Riwayat Belanja</a>
-                                @elseif (auth()->user()->role === 'owner' || auth()->user()->role === 'seller')
-                                    <a href="{{ auth()->user()->role === 'owner' ? '/owner/dashboard' : '/seller/dashboard' }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50">Dashboard</a>
                                 @else
                                     <a href="/admin" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50">Admin Panel</a>
                                 @endif

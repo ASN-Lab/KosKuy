@@ -115,6 +115,12 @@ class ThriftProductController extends Controller
             'buyer_id' => $request->user()->id,
         ]);
 
+        $product->seller->notify(
+            'purchase',
+            'Produk Terjual',
+            "Produk {$product->title} Anda telah dibeli."
+        );
+
         return response()->json(['success' => true, 'message' => 'Pembelian berhasil']);
     }
 

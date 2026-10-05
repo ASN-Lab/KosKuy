@@ -107,6 +107,12 @@ class OwnerController extends Controller
         ]);
         $booking->update(['status' => $data['status']]);
 
+        $booking->user->notify(
+            'booking_status',
+            'Status Booking Diperbarui',
+            "Booking Anda untuk {$booking->kos->title} kini berstatus {$data['status']}."
+        );
+
         return back()->with('success', 'Status booking diperbarui.');
     }
 

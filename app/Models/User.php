@@ -5,6 +5,7 @@ namespace App\Models;
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use App\Models\Booking;
 use App\Models\KosListing;
+use App\Models\Notification;
 use App\Models\ThriftProduct;
 use Filament\Models\Contracts\FilamentUser;
 use Filament\Panel;
@@ -36,6 +37,26 @@ class User extends Authenticatable implements FilamentUser
     public function bookings(): HasMany
     {
         return $this->hasMany(Booking::class);
+    }
+
+    public function notifications(): HasMany
+    {
+        return $this->hasMany(Notification::class)->latest();
+    }
+
+    public function unreadNotifications(): HasMany
+    {
+        return $this->notifications()->whereNull('read_at');
+    }
+
+    public function notify(string $type, string $title, string $body, array $data = []): void
+    {
+        $this->notifications()->create([
+            'type' => $type,
+            'title' => $title,
+            'body' => $body,
+            'data' => $data,
+        ]);
     }
 
     /**

@@ -35,6 +35,12 @@ class BookingController extends Controller
             'notes' => $request->notes,
         ]);
 
+        $kos->owner->notify(
+            'booking',
+            'Booking Baru',
+            "Mahasiswa {$request->user()->name} memesan {$kos->title} untuk tanggal {$request->booking_date}."
+        );
+
         $ownerPhone = $kos->owner->phone;
         if ($ownerPhone) {
             $message = "Halo, ada booking baru untuk {$kos->title} pada {$request->booking_date}.\n\nKlik link untuk konfirmasi: http://127.0.0.1:8000/admin/bookings";
@@ -120,6 +126,12 @@ class BookingController extends Controller
         }
 
         $booking->update(['status' => $request->status]);
+
+        $booking->user->notify(
+            'booking_status',
+            'Status Booking Diperbarui',
+            "Booking Anda untuk {$booking->kos->title} kini berstatus {$request->status}."
+        );
 
         return response()->json([
             'success' => true,

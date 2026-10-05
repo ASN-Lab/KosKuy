@@ -42,11 +42,11 @@ class WebAuthController extends Controller
             case 'admin':
                 return '/admin';
             case 'owner':
-                return '/owner/dashboard';
+                return route('owner.dashboard');
             case 'seller':
-                return '/seller/dashboard';
+                return route('seller.dashboard');
             default:
-                return '/';
+                return route('home');
         }
     }
 }

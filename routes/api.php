@@ -7,6 +7,7 @@ use App\Http\Controllers\Api\V1\CategoryController;use App\Http\Controllers\Api\
 use App\Http\Controllers\Api\V1\ThriftProductController;
 use App\Http\Controllers\Api\V1\BookingController;
 use App\Http\Controllers\Api\V1\KosMonitoringController;
+use App\Http\Controllers\Api\V1\NotificationController;
 
 use App\Http\Controllers\Api\V1\AuthController;
 
@@ -18,6 +19,8 @@ Route::prefix('v1')->group(function () {
         Route::post('/logout', [AuthController::class, 'logout']);
         Route::get('/me', [AuthController::class, 'me']);
         Route::put('/me', [AuthController::class, 'updateProfile']);
+        Route::get('/notifications', [NotificationController::class, 'index']);
+        Route::post('/notifications/{id}/read', [NotificationController::class, 'markRead']);
         
         Route::get('/kos', [KosController::class, 'index']);
         Route::get('/kos/{id}', [KosController::class, 'show']);

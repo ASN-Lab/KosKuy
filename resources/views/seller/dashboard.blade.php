@@ -1,4 +1,6 @@
-@extends('layouts.app')
+@extends('layouts.dashboard', ['dashboardUrl' => route('seller.dashboard')])
+
+@section('title', 'Dashboard Seller')
 
 @section('content')
 <div class="flex justify-between items-center mb-8">

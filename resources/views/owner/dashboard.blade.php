@@ -1,4 +1,6 @@
-@extends('layouts.app')
+@extends('layouts.dashboard', ['dashboardUrl' => route('owner.dashboard')])
+
+@section('title', 'Dashboard Owner')
 
 @section('content')
 <div class="flex justify-between items-center mb-8">

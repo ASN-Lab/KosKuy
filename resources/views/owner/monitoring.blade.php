@@ -1,4 +1,6 @@
-@extends('layouts.app')
+@extends('layouts.dashboard', ['dashboardUrl' => route('owner.dashboard')])
+
+@section('title', 'Monitoring Kos')
 
 @section('content')
 <a href="{{ route('owner.dashboard') }}" class="text-indigo-600 hover:underline text-sm inline-block mb-4">&larr; Kembali ke Dashboard</a>
