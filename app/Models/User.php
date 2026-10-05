@@ -94,4 +94,14 @@ class User extends Authenticatable implements FilamentUser
             'password' => 'hashed',
         ];
     }
+
+    public function kosListings(): HasMany
+    {
+        return $this->hasMany(KosListing::class, 'owner_id');
+    }
+
+    public function thriftProducts(): HasMany
+    {
+        return $this->hasMany(ThriftProduct::class, 'seller_id');
+    }
 }

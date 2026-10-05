@@ -25,7 +25,7 @@ class UserSeeder extends Seeder
             [
                 'name' => 'Pemilik Kos Maju Jaya',
                 'password' => Hash::make('owner123'),
-                'phone' => '628123456789',
+                'phone' => '08978889402',
                 'role' => 'owner',
             ]
         );
@@ -46,6 +46,11 @@ class UserSeeder extends Seeder
                 'name' => 'Refasya Audrey M',
                 'password' => Hash::make('student123'),
                 'phone' => '085260851563',
+            ['email' => 'mahasiswa@koskuy.id'],
+            [
+                'name' => 'Rangga Pratama',
+                'password' => Hash::make('mahasiswa123'),
+                'phone' => '081377889402',
                 'role' => 'student',
             ]
         );
