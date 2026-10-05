@@ -12,13 +12,18 @@ class ThriftProduct extends Model
     use HasFactory;
 
     protected $fillable = [
-        'seller_id', 'category_id', 'title', 'description', 
+        'seller_id', 'buyer_id', 'category_id', 'title', 'description', 
         'price', 'condition_status', 'is_sold'
     ];
 
     public function seller(): BelongsTo
     {
         return $this->belongsTo(User::class, 'seller_id');
+    }
+
+    public function buyer(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'buyer_id');
     }
 
     public function category(): BelongsTo
