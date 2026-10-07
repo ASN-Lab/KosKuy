@@ -39,26 +39,31 @@
                         @endif
                     </a>
                 @endforeach
-
-                <a href="{{ route('flyer') }}" class="rounded-full px-4 py-2 text-sm font-semibold text-ink-600 transition-colors hover:bg-ink-100 hover:text-ink-900">
-                    Flyer
-                </a>
             </nav>
 
             {{-- Actions --}}
             <div class="flex items-center gap-2">
                 @auth
-                    <a
-                        href="{{ route('dashboard') }}"
-                        class="hidden items-center gap-2 rounded-full border border-ink-200 bg-white py-1.5 pr-4 pl-1.5 text-sm font-semibold text-ink-700 transition hover:border-brand-300 hover:text-brand-700 sm:inline-flex"
-                    >
-                        <span class="grid size-8 place-items-center rounded-full bg-brand-100 text-xs font-bold text-brand-700">
-                            {{ initials(auth()->user()->name) }}
-                        </span>
-                        <span class="max-w-24 truncate">{{ auth()->user()->name }}</span>
-                    </a>
+                    <div class="relative" x-data="{ userMenu: false }">
+                        <button @click="userMenu = !userMenu" class="flex items-center gap-2 rounded-full border border-ink-200 bg-white py-1.5 pr-4 pl-1.5 text-sm font-semibold text-ink-700 transition hover:border-brand-300 hover:text-brand-700">
+                            <span class="grid size-8 place-items-center rounded-full bg-brand-100 text-xs font-bold text-brand-700">
+                                {{ initials(auth()->user()->name) }}
+                            </span>
+                            <span class="max-w-24 truncate">{{ auth()->user()->name }}</span>
+                            <x-ui.icon name="chevron-down" class="size-4 text-ink-400" />
+                        </button>
+                        <div x-show="userMenu" @click.outside="userMenu = false" class="absolute right-0 mt-2 w-48 rounded-2xl border border-ink-100 bg-white p-2 shadow-xl">
+                            <a href="{{ route('profile') }}" class="block rounded-xl px-4 py-2 text-sm font-medium hover:bg-ink-50">Informasi Akun</a>
+                            <a href="{{ auth()->user()->role === 'owner' ? route('owner.dashboard') : (auth()->user()->role === 'seller' ? route('seller.dashboard') : route('dashboard')) }}" class="block rounded-xl px-4 py-2 text-sm font-medium hover:bg-ink-50">Dashboard</a>
+                            <hr class="my-2 border-ink-100">
+                            <form method="POST" action="{{ route('logout') }}">
+                                @csrf
+                                <button type="submit" class="w-full rounded-xl px-4 py-2 text-left text-sm font-bold text-rose-600 hover:bg-rose-50">Keluar</button>
+                            </form>
+                        </div>
+                    </div>
                 @else
-                    <a href="{{ route('login') }}" class="hidden btn btn-md btn-outline sm:inline-flex">
+                    <a href="{{ route('login') }}" class="btn btn-md btn-outline inline-flex">
                         <x-ui.icon name="lock-closed" class="size-4" />
                         Masuk
                     </a>
@@ -107,16 +112,9 @@
                 </a>
             @endforeach
 
-            <a href="{{ route('flyer') }}" class="flex items-center gap-3 rounded-2xl px-4 py-3 text-base font-semibold text-ink-700 transition hover:bg-ink-100">
-                <span class="grid size-9 place-items-center rounded-xl bg-ink-100 text-ink-500">
-                    <x-ui.icon name="arrow-down-tray" class="size-5" />
-                </span>
-                Flyer Promosi
-            </a>
-
             <div class="!mt-4 grid grid-cols-2 gap-3 border-t border-ink-100 pt-4">
                 @auth
-                    <a href="{{ route('dashboard') }}" class="btn btn-md btn-outline">Dashboard</a>
+                    <a href="{{ auth()->user()->role === 'owner' ? route('owner.dashboard') : (auth()->user()->role === 'seller' ? route('seller.dashboard') : route('dashboard')) }}" class="btn btn-md btn-outline">Dashboard</a>
                     <form method="POST" action="{{ route('logout') }}">
                         @csrf
                         <button type="submit" class="btn btn-md btn-outline w-full">Keluar</button>

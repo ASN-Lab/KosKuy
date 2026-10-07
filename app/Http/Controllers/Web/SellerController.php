@@ -64,6 +64,38 @@ class SellerController extends Controller
         return back()->with('success', 'Produk dihapus.');
     }
 
+    public function edit(ThriftProduct $product)
+    {
+        $this->authorizeSeller($product);
+        $categories = Category::all();
+        return view('seller.edit', compact('product', 'categories'));
+    }
+
+    public function update(Request $request, ThriftProduct $product)
+    {
+        $this->authorizeSeller($product);
+
+        $data = $request->validate([
+            'category_id' => 'required|exists:categories,id',
+            'title' => 'required|string|max:255',
+            'description' => 'required|string',
+            'price' => 'required|numeric|min:0',
+            'condition_status' => 'required|string|max:50',
+            'images.*' => 'image|mimes:jpeg,png,jpg|max:2048',
+        ]);
+
+        $product->update($data);
+
+        if ($request->hasFile('images')) {
+            foreach ($request->file('images') as $image) {
+                $path = $image->store('thrift', 'public');
+                $product->images()->create(['image_path' => $path]);
+            }
+        }
+
+        return redirect()->route('seller.dashboard')->with('success', 'Produk berhasil diperbarui.');
+    }
+
     private function authorizeSeller(ThriftProduct $product): void
     {
         if ($product->seller_id !== auth()->id()) {

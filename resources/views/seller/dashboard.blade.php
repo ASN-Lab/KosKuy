@@ -1,142 +1,69 @@
-@extends('layouts.dashboard', ['dashboardUrl' => route('seller.dashboard')])
+@extends('layouts.app')
 
-@section('title', 'Dashboard Seller')
+@section('title', 'Dashboard Penjual | KosKuy')
 
 @section('content')
-<div class="flex justify-between items-center mb-8">
-    <h1 class="text-2xl font-bold">Dashboard Seller (Thrift)</h1>
-    <span class="text-gray-500">Selamat datang, {{ auth()->user()->name }}</span>
-</div>
+<div class="container-page py-12">
+    <div class="flex items-center justify-between">
+        <h1 class="heading-xl">Dashboard Penjual</h1>
+        <button type="button" class="btn btn-brand" onclick="document.getElementById('add-product-modal').classList.remove('hidden')">Tambah Barang</button>
+    </div>
 
-@if (session('success'))
-    <div class="bg-green-50 text-green-700 p-3 rounded-lg mb-6">{{ session('success') }}</div>
-@endif
-
-<!-- Analisis Penjualan -->
-<div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
-    <div class="bg-white rounded-xl shadow-md p-6">
-        <p class="text-sm text-gray-500">Total Produk</p>
-        <p class="text-3xl font-bold text-indigo-600 mt-1">{{ $stats['total_products'] }}</p>
+    <div id="add-product-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
+        <div class="card w-full max-w-lg p-6">
+            <h2 class="font-bold text-lg">Tambah Barang Thrift</h2>
+            <form action="{{ route('seller.products.store') }}" method="POST" enctype="multipart/form-data" class="mt-4 space-y-4">
+                @csrf
+                <input type="text" name="title" placeholder="Nama Barang" class="field w-full" required>
+                <textarea name="description" placeholder="Deskripsi" class="field w-full"></textarea>
+                <input type="number" name="price" placeholder="Harga" class="field w-full" required>
+                <select name="category_id" class="field w-full">
+                    @foreach($categories as $cat) <option value="{{ $cat->id }}">{{ $cat->name }}</option> @endforeach
+                </select>
+                <input type="text" name="condition_status" placeholder="Kondisi (misal: Bekas Layak Pakai)" class="field w-full">
+                <input type="file" name="images[]" multiple class="field w-full">
+                <div class="flex gap-2 justify-end">
+                    <button type="button" class="btn btn-white" onclick="document.getElementById('add-product-modal').classList.add('hidden')">Batal</button>
+                    <button type="submit" class="btn btn-brand">Simpan</button>
+                </div>
+            </form>
+        </div>
     </div>
-    <div class="bg-white rounded-xl shadow-md p-6">
-        <p class="text-sm text-gray-500">Produk Terjual</p>
-        <p class="text-3xl font-bold text-green-600 mt-1">{{ $stats['total_sold'] }}</p>
+    
+    <div class="mt-8 grid gap-6">
+        <div class="card p-6">
+            <h2 class="font-bold text-lg">Produk Saya</h2>
+            <table class="w-full mt-4">
+                <tbody>
+                    @foreach($products as $product)
+                        <tr class="border-b">
+                            <td class="p-2 font-medium">{{ $product->title }}</td>
+                            <td class="p-2">{{ rupiah($product->price) }}</td>
+                            <td class="p-2">
+                                <span class="badge {{ $product->is_sold ? 'bg-ink-100 text-ink-500' : 'bg-accent-50 text-accent-700' }}">
+                                    {{ $product->is_sold ? 'Terjual' : 'Aktif' }}
+                                </span>
+                            </td>
+                            <td class="p-2">
+                                <form action="{{ route('seller.products.toggle', $product->id) }}" method="POST">
+                                    @csrf @method('PATCH')
+                                    <button class="text-brand-600 hover:underline text-xs">{{ $product->is_sold ? 'Aktifkan Kembali' : 'Tandai Terjual' }}</button>
+                                </form>
+                            </td>
+                            <td class="p-2">
+                                <a href="{{ route('seller.products.edit', $product->id) }}" class="text-ink-600 hover:underline text-xs">Edit</a>
+                            </td>
+                            <td class="p-2">
+                                <form action="{{ route('seller.products.destroy', $product->id) }}" method="POST">
+                                    @csrf @method('DELETE')
+                                    <button class="text-rose-600 hover:underline text-xs">Hapus</button>
+                                </form>
+                            </td>
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        </div>
     </div>
-    <div class="bg-white rounded-xl shadow-md p-6">
-        <p class="text-sm text-gray-500">Total Pendapatan</p>
-        <p class="text-3xl font-bold text-indigo-600 mt-1">Rp {{ number_format($stats['total_revenue'], 0, ',', '.') }}</p>
-    </div>
-</div>
-
-<h2 class="text-xl font-bold mb-4">Tambah Produk Thrift Baru</h2>
-<form method="POST" action="{{ route('seller.products.store') }}" enctype="multipart/form-data" class="bg-white rounded-xl shadow-md p-6 mb-12 grid grid-cols-1 md:grid-cols-2 gap-4">
-    @csrf
-    <div>
-        <label class="block text-sm font-medium text-gray-700 mb-1">Kategori</label>
-        <select name="category_id" required class="w-full border border-gray-300 rounded-lg px-3 py-2">
-            @foreach ($categories as $category)
-                <option value="{{ $category->id }}">{{ $category->name }}</option>
-            @endforeach
-        </select>
-    </div>
-    <div>
-        <label class="block text-sm font-medium text-gray-700 mb-1">Judul Produk</label>
-        <input type="text" name="title" required class="w-full border border-gray-300 rounded-lg px-3 py-2">
-    </div>
-    <div>
-        <label class="block text-sm font-medium text-gray-700 mb-1">Harga (Rp)</label>
-        <input type="number" name="price" min="0" step="0.01" required class="w-full border border-gray-300 rounded-lg px-3 py-2">
-    </div>
-    <div>
-        <label class="block text-sm font-medium text-gray-700 mb-1">Kondisi</label>
-        <select name="condition_status" class="w-full border border-gray-300 rounded-lg px-3 py-2">
-            <option value="baru">Baru</option>
-            <option value="like_new">Seperti Baru</option>
-            <option value="bekas">Bekas</option>
-            <option value="rusak">Rusak / Part</option>
-        </select>
-    </div>
-    <div class="md:col-span-2">
-        <label class="block text-sm font-medium text-gray-700 mb-1">Deskripsi</label>
-        <textarea name="description" rows="3" required class="w-full border border-gray-300 rounded-lg px-3 py-2"></textarea>
-    </div>
-    <div class="md:col-span-2">
-        <label class="block text-sm font-medium text-gray-700 mb-1">Gambar Produk</label>
-        <input type="file" name="images[]" multiple accept="image/*" class="w-full border border-gray-300 rounded-lg px-3 py-2">
-    </div>
-    <div class="md:col-span-2">
-        <button class="bg-indigo-600 text-white px-6 py-2 rounded-lg hover:bg-indigo-700">Simpan Produk</button>
-    </div>
-</form>
-
-<h2 class="text-xl font-bold mb-4">Manajemen Inventaris Produk</h2>
-<div class="bg-white rounded-xl shadow-md overflow-hidden mb-12">
-    <table class="w-full text-sm">
-        <thead class="bg-gray-50 text-left">
-            <tr>
-                <th class="px-4 py-3">Judul</th>
-                <th class="px-4 py-3">Kategori</th>
-                <th class="px-4 py-3">Harga</th>
-                <th class="px-4 py-3">Kondisi</th>
-                <th class="px-4 py-3">Status</th>
-                <th class="px-4 py-3">Aksi</th>
-            </tr>
-        </thead>
-        <tbody>
-            @forelse ($products as $product)
-                <tr class="border-t">
-                    <td class="px-4 py-3 font-medium">{{ $product->title }}</td>
-                    <td class="px-4 py-3">{{ $product->category->name }}</td>
-                    <td class="px-4 py-3">Rp {{ number_format($product->price, 0, ',', '.') }}</td>
-                    <td class="px-4 py-3 capitalize">{{ $product->condition_status }}</td>
-                    <td class="px-4 py-3">
-                        <span class="px-2 py-1 rounded text-xs {{ $product->is_sold ? 'bg-red-100 text-red-700' : 'bg-green-100 text-green-700' }}">
-                            {{ $product->is_sold ? 'Terjual' : 'Aktif' }}
-                        </span>
-                    </td>
-                    <td class="px-4 py-3 flex gap-3">
-                        <form method="POST" action="{{ route('seller.products.toggle', $product) }}">
-                            @csrf
-                            @method('PATCH')
-                            <button class="text-indigo-600 text-sm hover:underline">{{ $product->is_sold ? 'Aktifkan' : 'Tandai Terjual' }}</button>
-                        </form>
-                        <form method="POST" action="{{ route('seller.products.destroy', $product) }}">
-                            @csrf
-                            @method('DELETE')
-                            <button class="text-red-600 text-sm hover:underline" onclick="return confirm('Hapus produk ini?')">Hapus</button>
-                        </form>
-                    </td>
-                </tr>
-            @empty
-                <tr><td colspan="6" class="px-4 py-8 text-center text-gray-400">Belum ada produk.</td></tr>
-            @endforelse
-        </tbody>
-    </table>
-</div>
-
-<h2 class="text-xl font-bold mb-4">Pelacakan Transaksi Masuk (Terjual)</h2>
-<div class="bg-white rounded-xl shadow-md overflow-hidden">
-    <table class="w-full text-sm">
-        <thead class="bg-gray-50 text-left">
-            <tr>
-                <th class="px-4 py-3">Waktu Terjual</th>
-                <th class="px-4 py-3">Produk</th>
-                <th class="px-4 py-3">Harga</th>
-                <th class="px-4 py-3">Pembeli</th>
-            </tr>
-        </thead>
-        <tbody>
-            @forelse ($products->where('is_sold', true) as $soldProduct)
-                <tr class="border-t">
-                    <td class="px-4 py-3">{{ $soldProduct->updated_at->format('d M Y, H:i') }}</td>
-                    <td class="px-4 py-3 font-medium">{{ $soldProduct->title }}</td>
-                    <td class="px-4 py-3">Rp {{ number_format($soldProduct->price, 0, ',', '.') }}</td>
-                    <td class="px-4 py-3">{{ $soldProduct->buyer->name ?? 'Mahasiswa (Umum)' }}</td>
-                </tr>
-            @empty
-                <tr><td colspan="4" class="px-4 py-8 text-center text-gray-400">Belum ada transaksi penjualan masuk.</td></tr>
-            @endforelse
-        </tbody>
-    </table>
 </div>
 @endsection
