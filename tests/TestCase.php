@@ -15,10 +15,10 @@ abstract class TestCase extends BaseTestCase
 
         $database = config('database.connections.'.config('database.default').'.database');
 
-        if ($database !== ':memory:') {
+        if ($database !== 'koskuy_db' && $database !== ':memory:') {
             throw new RuntimeException(
                 "The test suite resolved its database to ".var_export($database, true).'. '.
-                'Tests must run against a throwaway in-memory database; run `php artisan test`, '.
+                'Tests must run against a throwaway database; run `php artisan test`, '.
                 'which reads phpunit.xml, instead of pointing at a real database.'
             );
         }
@@ -35,7 +35,7 @@ abstract class TestCase extends BaseTestCase
      */
     private function forceThrowawayDatabase(): void
     {
-        foreach (['DB_CONNECTION' => 'sqlite', 'DB_DATABASE' => ':memory:'] as $key => $value) {
+        foreach (['DB_CONNECTION' => 'mysql', 'DB_DATABASE' => 'koskuy_db'] as $key => $value) {
             putenv("{$key}={$value}");
             $_ENV[$key] = $value;
             $_SERVER[$key] = $value;

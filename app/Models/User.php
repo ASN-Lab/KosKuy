@@ -24,6 +24,12 @@ class User extends Authenticatable implements FilamentUser
         return $this->role === 'admin';
     }
 
+
+    public function bookings(): HasMany
+    {
+        return $this->hasMany(Booking::class);
+    }
+
     public function kosListings(): HasMany
     {
         return $this->hasMany(KosListing::class, 'owner_id');
@@ -32,11 +38,6 @@ class User extends Authenticatable implements FilamentUser
     public function thriftProducts(): HasMany
     {
         return $this->hasMany(ThriftProduct::class, 'seller_id');
-    }
-
-    public function bookings(): HasMany
-    {
-        return $this->hasMany(Booking::class);
     }
 
     public function notifications(): HasMany
@@ -93,15 +94,5 @@ class User extends Authenticatable implements FilamentUser
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
-    }
-
-    public function kosListings(): HasMany
-    {
-        return $this->hasMany(KosListing::class, 'owner_id');
-    }
-
-    public function thriftProducts(): HasMany
-    {
-        return $this->hasMany(ThriftProduct::class, 'seller_id');
     }
 }

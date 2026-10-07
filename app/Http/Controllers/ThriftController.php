@@ -19,9 +19,12 @@ class ThriftController extends Controller
     {
         $filters = $this->filters($request);
 
-        $query = ThriftProduct::where('is_sold', false)->with(['images', 'category', 'seller']);
+        $query = ThriftProduct::with(['images', 'category', 'seller']);
 
         $this->applyFilters($query, $filters);
+
+        // Sold items stay visible in the catalog, but sorted last.
+        $query->orderByDesc('is_sold');
 
         match ($filters['sort']) {
             'termurah' => $query->orderBy('price')->orderByDesc('id'),

@@ -30,9 +30,14 @@
                         'icon' => 'academic-cap',
                     ],
                     'owner' => [
-                        'label' => 'Pemilik Kos / Penjual',
-                        'description' => 'Pasang listing dan kelola barang thrift kamu.',
+                        'label' => 'Pemilik Kos',
+                        'description' => 'Pasang listing kos.',
                         'icon' => 'building-office-2',
+                    ],
+                    'seller' => [
+                        'label' => 'Penjual Thrift',
+                        'description' => 'Kelola barang thrift kamu.',
+                        'icon' => 'shopping-bag',
                     ],
                 ];
             @endphp
@@ -145,8 +150,8 @@
                     class="absolute top-1/2 right-3 -translate-y-1/2 rounded-lg p-1.5 text-ink-400 transition hover:bg-ink-100 hover:text-ink-700"
                     :aria-label="show ? 'Sembunyikan password' : 'Tampilkan password'"
                 >
-                    <x-ui.icon name="information-circle" class="size-4.5" x-show="!show" />
-                    <x-ui.icon name="minus-circle" class="size-4.5" x-cloak x-show="show" />
+                    <x-ui.icon name="eye" class="size-4.5" x-show="!show" />
+                    <x-ui.icon name="eye-slash" class="size-4.5" x-cloak x-show="show" />
                 </button>
             </div>
             @error('password')

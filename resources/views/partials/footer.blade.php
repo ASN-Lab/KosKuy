@@ -13,7 +13,6 @@
         ['label' => 'Tentang Kami', 'href' => route('home') . '#tentang'],
         ['label' => 'Cara Kerja', 'href' => route('home') . '#cara-kerja'],
         ['label' => 'FAQ', 'href' => route('home') . '#faq'],
-        ['label' => 'Flyer Promosi', 'href' => route('flyer')],
     ];
 
     $legal = [

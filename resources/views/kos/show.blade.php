@@ -261,7 +261,7 @@
         @endif
 
         @if($kos->owner && $kos->owner->phone)
-        <a href="https://wa.me/{{ $kos->owner->phone }}?text=Halo, saya tertarik dengan kos {{ urlencode($kos->title) }}" target="_blank"
+        <a href="{{ waLink($kos->owner->phone, 'Halo, saya tertarik dengan kos ' . $kos->title) }}" target="_blank"
            class="block w-full bg-green-500 text-white text-center py-3 rounded-lg font-semibold hover:bg-green-600 mt-4">
             Hubungi Pemilik via WhatsApp
         </a>
@@ -273,7 +273,9 @@
                     <form method="POST" action="{{ route('web.bookings.store') }}">
                         @csrf
                         <input type="hidden" name="kos_id" value="{{ $kos->id }}">
-                        <button class="block w-full bg-indigo-600 text-white text-center py-3 rounded-lg font-semibold hover:bg-indigo-700 mt-4">
+                        <input type="date" name="booking_date" class="field w-full mb-2" required min="{{ date('Y-m-d') }}">
+                        <textarea name="notes" placeholder="Catatan untuk pemilik (opsional)" class="field w-full mb-2"></textarea>
+                        <button type="submit" class="block w-full bg-indigo-600 text-white text-center py-3 rounded-lg font-semibold hover:bg-indigo-700">
                             Booking Kos Ini
                         </button>
                     </form>

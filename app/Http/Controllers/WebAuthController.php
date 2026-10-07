@@ -12,6 +12,35 @@ class WebAuthController extends Controller
         return view('auth.login');
     }
 
+    public function showRegister()
+    {
+        return view('auth.register');
+    }
+
+    public function register(Request $request)
+    {
+        $data = $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255|unique:users',
+            'password' => 'required|string|min:8|confirmed',
+            'phone' => 'required|string|max:20',
+            'role' => 'required|in:student,owner,seller',
+            'terms' => 'required|accepted',
+        ]);
+
+        $user = \App\Models\User::create([
+            'name' => $data['name'],
+            'email' => $data['email'],
+            'password' => bcrypt($data['password']),
+            'phone' => $data['phone'],
+            'role' => $data['role'],
+        ]);
+
+        Auth::login($user);
+
+        return redirect()->intended($this->homeFor($user));
+    }
+
     public function login(Request $request)
     {
         $credentials = $request->validate([
@@ -38,15 +67,13 @@ class WebAuthController extends Controller
 
     private function homeFor($user): string
     {
-        switch ($user->role) {
-            case 'admin':
-                return '/admin';
-            case 'owner':
-                return route('owner.dashboard');
-            case 'seller':
-                return route('seller.dashboard');
-            default:
-                return route('home');
+        if ($user->role === 'admin') {
+            return '/admin';
+        } elseif ($user->role === 'owner') {
+            return route('owner.dashboard');
+        } elseif ($user->role === 'seller') {
+            return route('seller.dashboard');
         }
+        return route('dashboard');
     }
 }

@@ -499,8 +499,7 @@
                     ['icon' => 'map-pin', 'title' => 'Peta tanpa API key', 'desc' => 'Lokasi kos ditampilkan langsung di peta interaktif, plus tautan rute ke Google Maps.', 'tone' => 'bg-accent-50 text-accent-600', 'span' => ''],
                     ['icon' => 'shield-check', 'title' => 'Kontak langsung', 'desc' => 'Nomor WA pemilik hanya ditampilkan sebagai tautan wa.me — data tidak dibocorkan.', 'tone' => 'bg-sun-50 text-sun-600', 'span' => ''],
                     ['icon' => 'device-phone-mobile', 'title' => 'Siap untuk mobile', 'desc' => 'REST API v1 sudah tersedia untuk aplikasi Flutter, dan tampilan web ini responsif penuh.', 'tone' => 'bg-violet-50 text-violet-600', 'span' => ''],
-                    ['icon' => 'bolt', 'title' => 'Muat cepat', 'desc' => 'Aset lokal, tanpa CDN berat. Halaman tampil-optimal di jaringan kampus yang lambat.', 'tone' => 'bg-ink-100 text-ink-700', 'span' => ''],
-                    ['icon' => 'megaphone', 'title' => 'Flyer siap pakai', 'desc' => 'Tersedia halaman flyer A4 yang siap cetak untuk bazar, seminar, dan sosialisasi kampus.', 'tone' => 'bg-rose-50 text-rose-600', 'span' => 'sm:col-span-2 lg:col-span-1'],
+                    ['icon' => 'bolt', 'title' => 'Muat cepat', 'desc' => 'Aset lokal, tanpa CDN berat. Halaman tampil-optimal di jaringan kampus yang lambat.', 'tone' => 'bg-ink-100 text-ink-700', 'span' => 'sm:col-span-2 lg:col-span-1'],
                 ] as $feature)
                     <article class="reveal card card-hover {{ $feature['span'] }} p-7">
                         <span class="grid size-12 place-items-center rounded-2xl {{ $feature['tone'] }}">

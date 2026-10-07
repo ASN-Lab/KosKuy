@@ -22,38 +22,60 @@ class BookingController extends Controller
             return response()->json(['success' => false, 'errors' => $validator->errors()], 422);
         }
 
+        $user = $request->user();
+        if (!$user) {
+            return redirect()->route('login')->with('error', 'Silakan login untuk melakukan booking.');
+        }
+
         $kos = KosListing::find($request->kos_id);
+        if (!$kos) {
+            return response()->json(['success' => false, 'message' => 'Kos tidak ditemukan'], 404);
+        }
+
         if (!$kos->is_available) {
             return response()->json(['success' => false, 'message' => 'Kos tidak tersedia'], 400);
         }
 
+        // Cek apakah user sudah punya booking active/pending untuk kos yang sama
+        $existing = Booking::where('user_id', $user->id)
+            ->where('kos_id', $request->kos_id)
+            ->whereIn('status', ['pending', 'confirmed'])
+            ->first();
+
+        if ($existing) {
+            if ($request->wantsJson()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Anda sudah memiliki booking aktif atau pending untuk kos ini.',
+                ], 409);
+            }
+            return redirect()->back()->with('error', 'Anda sudah memiliki booking aktif atau pending untuk kos ini.');
+        }
+
         $booking = Booking::create([
-            'user_id' => $request->user()->id,
+            'user_id' => $user->id,
             'kos_id' => $request->kos_id,
             'booking_date' => $request->booking_date,
             'status' => 'pending',
             'notes' => $request->notes,
         ]);
 
-        $kos->owner->notify(
+        $owner = $kos->owner;
+        $owner->notify(
             'booking',
             'Booking Baru',
-            "Mahasiswa {$request->user()->name} memesan {$kos->title} untuk tanggal {$request->booking_date}."
+            "Mahasiswa {$user->name} memesan {$kos->title} untuk tanggal {$request->booking_date}."
         );
 
-        $ownerPhone = $kos->owner->phone;
-        if ($ownerPhone) {
-            $message = "Halo, ada booking baru untuk {$kos->title} pada {$request->booking_date}.\n\nKlik link untuk konfirmasi: http://127.0.0.1:8000/admin/bookings";
-            $whatsappUrl = "https://wa.me/$ownerPhone?text=" . urlencode($message);
-            // Catat notifikasi untuk dikirim nanti via job (sederhana: direct request)
-            // Untuk MVP, kita catat log saja
+        if ($request->wantsJson()) {
+            return response()->json([
+                'success' => true,
+                'message' => 'Booking berhasil dibuat. Tunggu konfirmasi dari pemilik kos.',
+                'data' => $booking->load(['user', 'kos']),
+            ], 201);
         }
 
-        return response()->json([
-            'success' => true,
-            'message' => 'Booking berhasil dibuat',
-            'data' => $booking->load(['user', 'kos']),
-        ], 201);
+        return redirect()->back()->with('success', 'Booking berhasil dibuat! Tunggu konfirmasi dari pemilik kos.');
     }
 
     public function myBookings(Request $request)

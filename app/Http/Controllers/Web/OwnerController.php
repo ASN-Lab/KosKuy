@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Web;
 
 use App\Http\Controllers\Controller;
 use App\Models\Booking;
+use App\Models\Category;
 use App\Models\KosFacility;
 use App\Models\KosListing;
 use App\Models\KosRoom;
@@ -22,12 +23,84 @@ class OwnerController extends Controller
         return view('owner.dashboard', compact('kosListings', 'bookings'));
     }
 
-    public function monitoring(KosListing $kos)
+    public function createKos()
+    {
+        return view('owner.create-kos');
+    }
+
+    public function storeKos(Request $request)
+    {
+        $data = $request->validate([
+            'title' => 'required|string|max:255',
+            'description' => 'required|string',
+            'price_per_month' => 'required|numeric|min:0',
+            'address' => 'required|string',
+            'gender_type' => 'required|in:putra,putri,campur',
+            'is_available' => 'sometimes',
+            'images.*' => 'image|mimes:jpeg,png,jpg|max:2048',
+        ]);
+
+        $data['owner_id'] = auth()->id();
+        $data['is_available'] = $request->has('is_available');
+
+        DB::transaction(function () use ($data, $request) {
+            $kos = KosListing::create($data);
+
+            $facilities = array_filter(array_map('trim', explode(',', $request->input('facilities', ''))));
+            foreach ($facilities as $facilityName) {
+                if ($facilityName !== '') {
+                    $kos->facilities()->create([
+                        'facility_name' => $facilityName,
+                        'condition_status' => 'normal',
+                    ]);
+                }
+            }
+
+            if ($request->hasFile('images')) {
+                foreach ($request->file('images') as $image) {
+                    $path = $image->store('kos', 'public');
+                    $kos->images()->create(['image_path' => $path]);
+                }
+            }
+        });
+
+        return redirect()->route('owner.dashboard')->with('success', 'Listing kos berhasil ditambahkan.');
+    }
+
+    public function editKos(KosListing $kos)
     {
         $this->authorizeOwner($kos);
-        $kos->load(['rooms', 'facilities.lastUpdater', 'conditionUpdates.updater']);
+        return view('owner.edit-kos', compact('kos'));
+    }
 
-        return view('owner.monitoring', compact('kos'));
+    public function updateKos(Request $request, KosListing $kos)
+    {
+        $this->authorizeOwner($kos);
+
+        $data = $request->validate([
+            'title' => 'required|string|max:255',
+            'description' => 'required|string',
+            'price_per_month' => 'required|numeric|min:0',
+            'address' => 'required|string',
+            'gender_type' => 'required|in:putra,putri,campur',
+            'is_available' => 'sometimes',
+            'images.*' => 'image|mimes:jpeg,png,jpg|max:2048',
+        ]);
+
+        $data['is_available'] = $request->has('is_available');
+
+        DB::transaction(function () use ($data, $request, $kos) {
+            $kos->update($data);
+
+            if ($request->hasFile('images')) {
+                foreach ($request->file('images') as $image) {
+                    $path = $image->store('kos', 'public');
+                    $kos->images()->create(['image_path' => $path]);
+                }
+            }
+        });
+
+        return redirect()->route('owner.dashboard')->with('success', 'Listing kos berhasil diperbarui.');
     }
 
     public function storeRoom(Request $request)
