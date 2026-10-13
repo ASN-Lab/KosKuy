@@ -33,6 +33,21 @@
         }
     },
     "scripts": {
+        "serve": "php -S 0.0.0.0:8000 -t public scripts/router.php",
+        "qa": [
+            "@php artisan test",
+            "@php scripts/smoke-routes.php",
+            "@php scripts/audit-html.php",
+            "@php scripts/audit-html.php \"\" auth",
+            "@php scripts/check-links.php",
+            "@php scripts/scan-copy.php",
+            "@php scripts/check-icons.php"
+        ],
+        "qa:smoke": "@php scripts/smoke-routes.php",
+        "qa:audit": "@php scripts/audit-html.php",
+        "qa:links": "@php scripts/check-links.php",
+        "qa:copy": "@php scripts/scan-copy.php",
+        "qa:icons": "@php scripts/check-icons.php",
         "post-autoload-dump": [
             "Illuminate\\Foundation\\ComposerScripts::postAutoloadDump",
             "@php artisan package:discover --ansi",

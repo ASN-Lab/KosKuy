@@ -29,7 +29,14 @@ class KosController extends Controller
             $query->where('price_per_month', '<=', $request->max_price);
         }
 
-        $listings = $query->latest()->paginate(10);
+        match ($request->input('sort', 'terbaru')) {
+            'termurah' => $query->orderBy('price_per_month'),
+            'termahal' => $query->orderByDesc('price_per_month'),
+            'nama' => $query->orderBy('title'),
+            default => $query->latest(),
+        };
+
+        $listings = $query->paginate(10);
 
         return response()->json([
             'success' => true,
