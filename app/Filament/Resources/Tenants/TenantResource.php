@@ -1,0 +1,61 @@
+<?php
+
+namespace App\Filament\Resources\Tenants;
+
+use App\Filament\Resources\Tenants\Pages\CreateTenant;
+use App\Filament\Resources\Tenants\Pages\EditTenant;
+use App\Filament\Resources\Tenants\Pages\ListTenants;
+use App\Filament\Resources\Tenants\Schemas\TenantForm;
+use App\Filament\Resources\Tenants\Tables\TenantsTable;
+use App\Models\Tenant;
+use Filament\Resources\Resource;
+use Filament\Schemas\Schema;
+use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Builder;
+
+class TenantResource extends Resource
+{
+    protected static ?string $model = Tenant::class;
+
+    protected static string|\BackedEnum|null $navigationIcon = 'heroicon-o-user-group';
+
+    protected static string|\UnitEnum|null $navigationGroup = 'Pengelolaan Kos';
+
+    protected static ?string $navigationLabel = 'Penghuni';
+
+    protected static ?string $modelLabel = 'Penghuni';
+
+    protected static ?string $pluralModelLabel = 'Daftar Penghuni';
+
+    protected static ?string $recordTitleAttribute = 'name';
+
+    public static function form(Schema $schema): Schema
+    {
+        return TenantForm::configure($schema);
+    }
+
+    public static function table(Table $table): Table
+    {
+        return TenantsTable::configure($table);
+    }
+
+    public static function getPages(): array
+    {
+        return [
+            'index' => ListTenants::route('/'),
+            'create' => CreateTenant::route('/create'),
+            'edit' => EditTenant::route('/{record}/edit'),
+        ];
+    }
+
+    public static function getEloquentQuery(): Builder
+    {
+        $query = parent::getEloquentQuery();
+
+        if (auth()->user()?->role === 'owner') {
+            $query->whereHas('kosListing', fn ($q) => $q->where('owner_id', auth()->id()));
+        }
+
+        return $query;
+    }
+}
