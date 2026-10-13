@@ -1,34 +1,67 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>KosKuy - Temukan Kos & Barang Bekas Berkualitas</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-</head>
-<body class="bg-gray-50">
-    <nav class="bg-white shadow-sm">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between h-16 items-center">
-                <a href="{{ route('home') }}" class="text-2xl font-bold text-indigo-600">KosKuy</a>
-                <div class="flex space-x-6">
-                    <a href="{{ route('home') }}" class="text-gray-700 hover:text-indigo-600">Beranda</a>
-                    <a href="/kos" class="text-gray-700 hover:text-indigo-600">Kos</a>
-                    <a href="/thrift" class="text-gray-700 hover:text-indigo-600">Thrift</a>
-                    <a href="/admin" class="bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700">Admin</a>
-                </div>
-            </div>
-        </div>
-    </nav>
+    <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <title>@yield('title', $title ?? 'KosKuy — Cari Kos & Barang Bekas Berkualitas untuk Mahasiswa')</title>
+
+    <meta name="description" content="@yield('meta_description', 'KosKuy adalah platform marketplace kos dan barang bekas untuk mahasiswa. Cari kos sesuai budget, bandingkan fasilitas, lalu chat pemilik langsung lewat WhatsApp. 100% gratis.')">
+    <meta name="theme-color" content="#4f46e5">
+    <meta name="author" content="KosKuy">
+
+    {{-- Social sharing --}}
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="KosKuy">
+    <meta property="og:locale" content="id_ID">
+    <meta property="og:title" content="@yield('title', 'KosKuy — Kos Impian, Thrift Pilihan')">
+    <meta property="og:description" content="@yield('meta_description', 'Platform kos & barang bekas untuk mahasiswa. Gratis, aman, dan langsung chat pemilik.')">
+    <meta property="og:url" content="{{ url()->current() }}">
+    <meta property="og:image" content="{{ asset('images/og-cover.png') }}">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="@yield('title', 'KosKuy — Kos Impian, Thrift Pilihan')">
+    <meta name="twitter:description" content="@yield('meta_description', 'Platform kos & barang bekas untuk mahasiswa.')">
+    <meta name="twitter:image" content="{{ asset('images/og-cover.png') }}">
+
+    <link rel="icon" href="{{ asset('favicon.svg') }}" type="image/svg+xml">
+    <link rel="alternate icon" href="{{ asset('favicon.png') }}" sizes="32x32">
+    <link rel="apple-touch-icon" href="{{ asset('images/app-icon-192.png') }}">
+    <link rel="manifest" href="{{ asset('site.webmanifest') }}">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&display=swap"
+    >
+
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
+</head>
+<body class="min-h-screen bg-white text-ink-700 antialiased">
+
+    <a href="#main" class="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[100] focus:rounded-full focus:bg-brand-600 focus:px-5 focus:py-2.5 focus:text-sm focus:font-semibold focus:text-white">
+        Lewati ke konten utama
+    </a>
+
+    @include('partials.navbar')
+
+    @include('partials.flash')
+
+    <main id="main">
         @yield('content')
     </main>
 
-    <footer class="bg-gray-800 text-white mt-12">
-        <div class="max-w-7xl mx-auto px-4 py-8 text-center">
-            <p>&copy; 2026 KosKuy. Platform Kos & Barang Bekas Mahasiswa.</p>
-        </div>
-    </footer>
+    @include('partials.footer')
+
+    @stack('modals')
+    @stack('scripts')
+
+    {{-- Mobile sticky action bar: only rendered on listing pages --}}
+    @hasSection('mobile-bar')
+        @yield('mobile-bar')
+    @endif
+
+    @include('partials.offline')
 </body>
 </html>
