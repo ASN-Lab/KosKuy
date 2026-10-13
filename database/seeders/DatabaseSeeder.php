@@ -14,6 +14,7 @@ class DatabaseSeeder extends Seeder
             KosListingSeeder::class,
             ThriftProductSeeder::class,
             ImageSeeder::class,
+            KosRentalSeeder::class,
         ]);
     }
 }
