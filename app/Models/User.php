@@ -6,12 +6,14 @@ namespace App\Models;
 use Filament\Models\Contracts\FilamentUser;
 use Filament\Panel;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable implements FilamentUser
 {
-    use HasFactory, Notifiable;
+    use HasApiTokens, HasFactory, Notifiable;
 
     public function canAccessPanel(Panel $panel): bool
     {
@@ -29,6 +31,9 @@ class User extends Authenticatable implements FilamentUser
         'password',
         'phone',
         'role',
+        'avatar_path',
+        'notify_email',
+        'notify_whatsapp',
     ];
 
     /**
@@ -51,6 +56,47 @@ class User extends Authenticatable implements FilamentUser
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
+            'notify_email' => 'boolean',
+            'notify_whatsapp' => 'boolean',
         ];
+    }
+
+    public function avatarUrl(): ?string
+    {
+        return $this->avatar_path ? asset('storage/' . $this->avatar_path) : null;
+    }
+
+    public function roleLabel(): string
+    {
+        return match ($this->role) {
+            'admin' => 'Admin',
+            'owner' => 'Pemilik / Pengelola Kos',
+            default => 'Mahasiswa / Pencari Kos',
+        };
+    }
+
+    public function kosListings(): HasMany
+    {
+        return $this->hasMany(KosListing::class, 'owner_id');
+    }
+
+    public function thriftProducts(): HasMany
+    {
+        return $this->hasMany(ThriftProduct::class, 'seller_id');
+    }
+
+    public function bookings(): HasMany
+    {
+        return $this->hasMany(Booking::class);
+    }
+
+    public function thriftPurchases(): HasMany
+    {
+        return $this->hasMany(ThriftPurchase::class, 'buyer_id');
+    }
+
+    public function appNotifications(): HasMany
+    {
+        return $this->hasMany(AppNotification::class);
     }
 }
