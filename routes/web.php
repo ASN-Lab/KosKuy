@@ -9,6 +9,8 @@ use App\Http\Controllers\Web\OwnerController;
 use App\Http\Controllers\Web\SellerController;
 use App\Http\Controllers\Web\StudentController;
 use App\Http\Controllers\NewsletterController;
+use App\Http\Controllers\Web\CheckoutController;
+use App\Http\Controllers\Web\MessageController;
 
 // Public Storefront
 Route::get('/', [HomeController::class, 'index'])->name('home');
@@ -71,6 +73,17 @@ Route::middleware('auth')->group(function () {
         Route::get('/purchases', [StudentController::class, 'purchases'])->name('my-purchases');
         Route::post('/bookings', [App\Http\Controllers\Api\V1\BookingController::class, 'store'])->name('web.bookings.store');
     });
+
+    // Checkout (manual payment: transfer bank / COD)
+    Route::get('/thrift/{id}/checkout', [CheckoutController::class, 'show'])->whereNumber('id')->name('thrift.checkout');
+    Route::post('/thrift/{id}/checkout', [CheckoutController::class, 'store'])->whereNumber('id')->name('thrift.checkout.store');
+    Route::post('/thrift/{id}/checkout/proof', [CheckoutController::class, 'storeProof'])->whereNumber('id')->name('thrift.checkout.proof');
+
+    // Messages (Student & Owner share the same inbox; participant check inside)
+    Route::get('/messages', [MessageController::class, 'index'])->name('messages.index');
+    Route::get('/messages/{conversation}', [MessageController::class, 'show'])->name('messages.show');
+    Route::post('/messages/start', [MessageController::class, 'store'])->name('messages.start');
+    Route::post('/messages/{conversation}', [MessageController::class, 'sendMessage'])->name('messages.send');
 
     // Owner specific
     Route::prefix('owner')->middleware('role:owner')->name('owner.')->group(function () {

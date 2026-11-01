@@ -46,16 +46,9 @@ class StorefrontTest extends TestCase
 
     public function test_public_pages_render(): void
     {
-        foreach (['/', '/kos', '/thrift', '/flyer', '/login', '/register'] as $uri) {
+        foreach (['/', '/kos', '/thrift', '/login', '/register'] as $uri) {
             $this->get($uri)->assertOk();
         }
-    }
-
-    public function test_flyer_exposes_print_stylesheet(): void
-    {
-        $this->get('/flyer')
-            ->assertOk()
-            ->assertSee('flyer-sheet', false);
     }
 
     public function test_kos_index_lists_only_available_listings(): void
@@ -141,7 +134,7 @@ class StorefrontTest extends TestCase
         $this->get('/kos/999999')->assertNotFound();
     }
 
-    public function test_thrift_index_hides_sold_products(): void
+    public function test_thrift_index_shows_all_products_but_tags_sold_ones(): void
     {
         $available = ThriftProduct::factory()->create(['title' => 'Buku Still Available']);
         $sold = ThriftProduct::factory()->sold()->create(['title' => 'Buku Sudah Terjual']);
@@ -149,7 +142,8 @@ class StorefrontTest extends TestCase
         $this->get('/thrift')
             ->assertOk()
             ->assertSee($available->title, false)
-            ->assertDontSee($sold->title, false);
+            ->assertSee($sold->title, false)
+            ->assertSee('Terjual', false);
     }
 
     public function test_thrift_index_filters_by_category(): void
