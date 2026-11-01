@@ -54,6 +54,23 @@
 
     @include('partials.footer')
 
+    @push('scripts')
+    <script>
+        window.startChat = async (type, id, ownerId) => {
+            const res = await fetch('{{ url('/messages/start') }}', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+                },
+                body: JSON.stringify({ listing_type: type, listing_id: id, owner_id: ownerId })
+            });
+            if (res.redirected) window.location.href = res.url;
+            else alert('Gagal memulai chat.');
+        };
+    </script>
+    @endpush
+
     @stack('modals')
     @stack('scripts')
 

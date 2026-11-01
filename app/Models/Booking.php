@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\MorphOne;
 
 class Booking extends Model
 {
@@ -14,6 +15,11 @@ class Booking extends Model
         'status',
         'notes',
     ];
+
+    public function payment(): MorphOne
+    {
+        return $this->morphOne(Payment::class, 'payable');
+    }
 
     public function user(): BelongsTo
     {

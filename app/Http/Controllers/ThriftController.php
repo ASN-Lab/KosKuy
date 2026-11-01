@@ -82,6 +82,18 @@ class ThriftController extends Controller
     }
 
     /**
+     * Halaman checkout manual (transfer bank / COD).
+     */
+    public function checkout($id)
+    {
+        $product = ThriftProduct::with(['images', 'seller'])->findOrFail($id);
+
+        abort_if($product->is_sold, 410, 'Barang sudah terjual.');
+
+        return view('thrift.checkout', ['product' => $product]);
+    }
+
+    /**
      * @return array{search: ?string, category: ?int, min: ?int, max: ?int, available: bool, sort: string}
      */
     private function filters(Request $request): array
@@ -127,6 +139,10 @@ class ThriftController extends Controller
 
         if ($filters['max'] !== null) {
             $query->where('price', '<=', $filters['max']);
+        }
+
+        if ($filters['available']) {
+            $query->where('is_sold', false);
         }
     }
 

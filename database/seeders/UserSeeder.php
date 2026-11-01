@@ -27,6 +27,22 @@ class UserSeeder extends Seeder
                 'password' => Hash::make('owner123'),
                 'phone' => '08978889402',
                 'role' => 'owner',
+                'bank_name' => 'BCA',
+                'bank_number' => '1234567890',
+                'bank_holder' => 'Pemilik Kos Maju Jaya',
+            ]
+        );
+
+        User::updateOrCreate(
+            ['email' => 'seller@koskuy.id'],
+            [
+                'name' => 'Seller Thrift KosKuy',
+                'password' => Hash::make('seller123'),
+                'phone' => '081234567890',
+                'role' => 'seller',
+                'bank_name' => 'BRI',
+                'bank_number' => '0987654321',
+                'bank_holder' => 'Seller Thrift KosKuy',
             ]
         );
 
@@ -46,6 +62,11 @@ class UserSeeder extends Seeder
                 'name' => 'Refasya Audrey M',
                 'password' => Hash::make('student123'),
                 'phone' => '085260851563',
+                'role' => 'student',
+            ]
+        );
+
+        User::updateOrCreate(
             ['email' => 'mahasiswa@koskuy.id'],
             [
                 'name' => 'Rangga Pratama',

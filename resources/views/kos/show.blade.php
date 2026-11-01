@@ -260,6 +260,15 @@
         <a href="https://www.google.com/maps?q={{ $kos->latitude }},{{ $kos->longitude }}" target="_blank" class="text-indigo-600 underline mb-6 inline-block">Lihat di Google Maps</a>
         @endif
 
+        @auth
+            @if(auth()->id() !== $kos->owner_id)
+            <button type="button" onclick="startChat('kos', {{ $kos->id }}, {{ $kos->owner_id }})"
+               class="block w-full bg-indigo-600 text-white text-center py-3 rounded-lg font-semibold hover:bg-indigo-700 mt-4">
+                Chat Pemilik
+            </button>
+            @endif
+        @endauth
+
         @if($kos->owner && $kos->owner->phone)
         <a href="{{ waLink($kos->owner->phone, 'Halo, saya tertarik dengan kos ' . $kos->title) }}" target="_blank"
            class="block w-full bg-green-500 text-white text-center py-3 rounded-lg font-semibold hover:bg-green-600 mt-4">

@@ -54,6 +54,7 @@
                         </button>
                         <div x-show="userMenu" @click.outside="userMenu = false" class="absolute right-0 mt-2 w-48 rounded-2xl border border-ink-100 bg-white p-2 shadow-xl">
                             <a href="{{ route('profile') }}" class="block rounded-xl px-4 py-2 text-sm font-medium hover:bg-ink-50">Informasi Akun</a>
+                            <a href="{{ route('messages.index') }}" class="block rounded-xl px-4 py-2 text-sm font-medium hover:bg-ink-50">Pesan</a>
                             <a href="{{ auth()->user()->role === 'owner' ? route('owner.dashboard') : (auth()->user()->role === 'seller' ? route('seller.dashboard') : route('dashboard')) }}" class="block rounded-xl px-4 py-2 text-sm font-medium hover:bg-ink-50">Dashboard</a>
                             <hr class="my-2 border-ink-100">
                             <form method="POST" action="{{ route('logout') }}">

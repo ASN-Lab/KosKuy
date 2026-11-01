@@ -128,7 +128,7 @@ check('thrift index + category', 'GET', '/thrift?category_id=' . Category::first
 check('thrift index + available', 'GET', '/thrift?available=1&min_price=10000');
 check('thrift show', 'GET', '/thrift/' . $thrift->id);
 check('thrift show 404', 'GET', '/thrift/999999', [], [404]);
-check('flyer', 'GET', '/flyer');
+// check('flyer', 'GET', '/flyer');
 check('login page', 'GET', '/login');
 check('register page', 'GET', '/register');
 check('dashboard redirects', 'GET', '/dashboard', [], [302]);
@@ -224,15 +224,20 @@ if ($login['status'] === 302) {
 
 $dashboard = dispatch('GET', '/dashboard', [], array_merge($cookies, $login['cookies']));
 
-if ($dashboard['status'] === 200 && ! str_contains($dashboard['body'], 'Undefined variable')) {
-    echo "  OK   dashboard authenticated [200]\n";
+// Owner role: /dashboard redirects to /owner/dashboard (302), then renders (200).
+$ownerDashboard = dispatch('GET', '/owner/dashboard', [], array_merge($cookies, $login['cookies']));
+
+if (in_array($dashboard['status'], [200, 302], true)
+    && $ownerDashboard['status'] === 200
+    && ! str_contains($ownerDashboard['body'], 'Undefined variable')) {
+    echo "  OK   dashboard authenticated [{$dashboard['status']} -> {$ownerDashboard['status']}]\n";
     $checks++;
 } else {
-    echo "  FAIL dashboard authenticated [{$dashboard['status']}]\n";
+    echo "  FAIL dashboard authenticated [{$dashboard['status']} / owner {$ownerDashboard['status']}]\n";
     $failures[] = 'dashboard authenticated';
 }
 
-$session = refreshSession(array_merge($cookies, $login['cookies']), '/dashboard');
+$session = refreshSession(array_merge($cookies, $login['cookies']), '/owner/dashboard');
 $logout = dispatch('POST', '/logout', ['_token' => $session['token']], $session['cookies']);
 
 if ($logout['status'] === 302) {

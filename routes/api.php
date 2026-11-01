@@ -10,6 +10,8 @@ use App\Http\Controllers\Api\V1\BookingController;
 use App\Http\Controllers\Api\V1\KosMonitoringController;
 use App\Http\Controllers\Api\V1\NotificationController;
 use App\Http\Controllers\Api\V1\AuthController;
+use App\Http\Controllers\Api\V1\ChatController;
+use App\Http\Controllers\Api\V1\PaymentController;
 
 Route::prefix('v1')->group(function () {
     Route::post('/register', [AuthController::class, 'register'])->middleware('throttle:5,1');
@@ -45,6 +47,15 @@ Route::prefix('v1')->group(function () {
         Route::post('/bookings/{id}/cancel', [BookingController::class, 'cancel']);
         Route::get('/owner/bookings', [BookingController::class, 'ownerBookings']);
         Route::patch('/bookings/{id}/status', [BookingController::class, 'updateStatus']);
+
+        Route::post('/payments', [PaymentController::class, 'store']);
+        Route::get('/payments/{type}/{id}', [PaymentController::class, 'show']);
+        Route::post('/payments/{id}/proof', [PaymentController::class, 'uploadProof']);
+
+        Route::get('/conversations', [ChatController::class, 'index']);
+        Route::post('/conversations', [ChatController::class, 'store']);
+        Route::get('/conversations/{conversation}/messages', [ChatController::class, 'messages']);
+        Route::post('/conversations/{conversation}/messages', [ChatController::class, 'sendMessage']);
 
         Route::prefix('owner/kos/{kosId}')->group(function () {
             Route::get('/monitoring', [KosMonitoringController::class, 'show']);

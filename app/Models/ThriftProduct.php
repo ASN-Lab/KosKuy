@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\MorphOne;
 
 class ThriftProduct extends Model
 {
@@ -15,6 +16,11 @@ class ThriftProduct extends Model
         'seller_id', 'buyer_id', 'category_id', 'title', 'description', 
         'price', 'condition_status', 'is_sold'
     ];
+
+    public function payment(): MorphOne
+    {
+        return $this->morphOne(Payment::class, 'payable');
+    }
 
     public function seller(): BelongsTo
     {

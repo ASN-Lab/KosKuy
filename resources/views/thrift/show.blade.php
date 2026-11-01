@@ -169,17 +169,21 @@
                             </div>
 
                             <div class="space-y-3 p-6">
-                                @if ($wa)
-                                    <a href="{{ $wa }}" target="_blank" rel="noopener" class="btn btn-lg btn-accent w-full">
-                                        <x-ui.icon name="chat-bubble-oval-left" class="size-5" />
-                                        Chat Penjual via WhatsApp
-                                    </a>
+                                @if ($product->is_sold)
+                                    <span class="badge bg-ink-900 text-white">Terjual</span>
                                 @else
-                                    <a href="{{ route('thrift.index') }}" class="btn btn-lg btn-primary w-full">
-                                        Lihat barang lain
+                                        <a href="{{ route('thrift.checkout', $product->id) }}" class="btn btn-lg btn-primary w-full">
+                                        <x-ui.icon name="shopping-cart" class="size-5" />
+                                        Beli Sekarang
                                     </a>
+                                    <button 
+                                        type="button"
+                                        onclick="window.startChat('thrift', {{ $product->id }}, {{ $product->seller_id }})" 
+                                        class="btn btn-lg btn-outline w-full">
+                                        <x-ui.icon name="chat-bubble-oval-left" class="size-5" />
+                                        Chat Penjual
+                                    </button>
                                 @endif
-
                                 <div class="grid grid-cols-2 gap-3">
                                     <button
                                         type="button"
@@ -308,11 +312,11 @@
                 <p class="truncate font-display text-lg font-extrabold text-accent-700">{{ rupiah($product->price) }}</p>
                 <p class="truncate text-[11px] text-ink-400">{{ $product->condition_status ?: 'Kondisi tidak dicantumkan' }}</p>
             </div>
-            @if ($wa)
-                <a href="{{ $wa }}" target="_blank" rel="noopener" class="btn btn-md btn-accent flex-1">
+            @if ($product->seller)
+                <button type="button" onclick="window.startChat('thrift', {{ $product->id }}, {{ $product->seller_id }})" class="btn btn-md btn-accent flex-1">
                     <x-ui.icon name="chat-bubble-oval-left" class="size-4" />
                     Chat Penjual
-                </a>
+                </button>
             @endif
         </div>
     </div>

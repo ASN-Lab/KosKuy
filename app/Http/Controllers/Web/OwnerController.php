@@ -28,6 +28,15 @@ class OwnerController extends Controller
         return view('owner.create-kos');
     }
 
+    public function monitoring(KosListing $kos)
+    {
+        $this->authorizeOwner($kos);
+
+        $kos->load(['rooms', 'facilities.lastUpdater', 'conditionUpdates.subject', 'conditionUpdates.updater']);
+
+        return view('owner.monitoring', compact('kos'));
+    }
+
     public function storeKos(Request $request)
     {
         $data = $request->validate([
