@@ -23,6 +23,7 @@ $outline = [
     'arrow-down-tray', 'play-circle', 'rocket-launch', 'key', 'sun',
     'cloud', 'bolt-slash', 'arrow-path', 'arrows-pointing-out', 'printer',
     'inbox-stack', 'square-2-stack', 'cog-6-tooth', 'lifebuoy', 'megaphone',
+    'check', 'eye', 'eye-slash', 'shopping-bag', 'shopping-cart', 'user-plus',
 ];
 
 $solid = [

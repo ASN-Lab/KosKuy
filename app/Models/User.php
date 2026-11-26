@@ -30,6 +30,11 @@ class User extends Authenticatable implements FilamentUser
         return $this->hasMany(Booking::class);
     }
 
+    public function purchases(): HasMany
+    {
+        return $this->hasMany(ThriftProduct::class, 'buyer_id');
+    }
+
     public function kosListings(): HasMany
     {
         return $this->hasMany(KosListing::class, 'owner_id');

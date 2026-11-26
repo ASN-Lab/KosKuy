@@ -1,16 +1,8 @@
 [package]
-name = "asn-lab/koskuy"
-version = "0.1.7"
-description = "KosKuy Laravel App"
+name = "koskuy"
+version = "0.1.0"
+authors = ["Student <student@example.com>"]
+description = "KosKuy - Student Housing and Thrift Marketplace"
 
 [dependencies]
-"php/php" = "8.3"
-
-[[command]]
-name = "server"
-module = "php/php:php-cgi"
-runner = "wcgi"
-
-[command.annotations.wcgi]
-dialect = "rfc3875"
-script = "router.php"
+# Dependencies would go here if we were using specific wasmer modules.

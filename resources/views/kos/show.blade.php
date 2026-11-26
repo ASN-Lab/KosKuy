@@ -438,24 +438,7 @@
 @push('scripts')
     <script>
         /* Shared helpers: native share with clipboard fallback, plus a tiny toast. */
-        window.koskuyToast = (message) => {
-            let toast = document.getElementById('koskuy-toast');
-
-            if (!toast) {
-                toast = document.createElement('div');
-                toast.id = 'koskuy-toast';
-                toast.className = 'fixed bottom-24 left-1/2 z-90 -translate-x-1/2 rounded-full bg-ink-950 px-5 py-3 text-sm font-semibold text-white shadow-lift transition-opacity duration-300 opacity-0';
-                document.body.appendChild(toast);
-            }
-
-            toast.textContent = message;
-            toast.style.opacity = '1';
-
-            clearTimeout(window.__koskuyToastTimer);
-            window.__koskuyToastTimer = setTimeout(() => {
-                toast.style.opacity = '0';
-            }, 2600);
-        };
+        
 
         window.share = async (url, title) => {
             if (navigator.share) {

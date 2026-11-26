@@ -29,7 +29,12 @@
                     <td class="px-4 py-3 text-gray-500">{{ $booking->notes ?? '-' }}</td>
                 </tr>
             @empty
-                <tr><td colspan="4" class="px-4 py-8 text-center text-gray-400">Belum ada booking.</td></tr>
+                <tr><td colspan="4" class="p-0"><x.partials.empty-state
+                    icon="calendar-days"
+                    title="Belum ada booking kos"
+                    description="Booking kos yang kamu lakukan akan muncul di sini."
+                    actionLabel="Cari Kos"
+                    :actionHref="route('kos.index')" /></td></tr>
             @endforelse
         </tbody>
     </table>
