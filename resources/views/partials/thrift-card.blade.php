@@ -13,7 +13,7 @@
         @if ($image)
             <img src="{{ $image }}" alt="{{ $product->title }}" class="media-img" loading="lazy" decoding="async">
         @else
-            <span class="absolute inset-0 grid place-items-center bg-linear-to-br from-accent-50 to-brand-soft">
+            <span class="absolute inset-0 grid place-items-center bg-brand-soft">
                 <span class="grid size-14 place-items-center rounded-2xl bg-white/80 text-accent-500 shadow-soft">
                     <x-ui.icon :name="categoryIcon($product->category)" class="size-7" />
                 </span>

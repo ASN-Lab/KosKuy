@@ -104,7 +104,7 @@
                                 </div>
                             @endif
                         @else
-                            <div class="grid aspect-4/3 place-items-center rounded-4xl border border-ink-100 bg-linear-to-br from-accent-50 to-brand-soft">
+                            <div class="grid aspect-4/3 place-items-center rounded-4xl border border-ink-100 bg-brand-soft">
                                 <div class="text-center">
                                     <span class="mx-auto grid size-16 place-items-center rounded-3xl bg-white/80 text-accent-500 shadow-soft">
                                         <x-ui.icon :name="categoryIcon($product->category)" class="size-8" />
@@ -266,25 +266,6 @@
 
 @push('scripts')
     <script>
-        window.koskuyToast = (message) => {
-            let toast = document.getElementById('koskuy-toast');
-
-            if (!toast) {
-                toast = document.createElement('div');
-                toast.id = 'koskuy-toast';
-                toast.className = 'fixed bottom-24 left-1/2 z-90 -translate-x-1/2 rounded-full bg-ink-950 px-5 py-3 text-sm font-semibold text-white shadow-lift transition-opacity duration-300 opacity-0';
-                document.body.appendChild(toast);
-            }
-
-            toast.textContent = message;
-            toast.style.opacity = '1';
-
-            clearTimeout(window.__koskuyToastTimer);
-            window.__koskuyToastTimer = setTimeout(() => {
-                toast.style.opacity = '0';
-            }, 2600);
-        };
-
         window.share = async (url, title) => {
             if (navigator.share) {
                 try {

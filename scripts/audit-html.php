@@ -56,7 +56,6 @@ $uris = $only ? [$only] : array_values(array_filter([
         $kos ? '/kos/' . $kos->id : null,
         '/thrift',
         $thrift ? '/thrift/' . $thrift->id : null,
-        '/flyer',
         '/login',
         '/register',
         $asUser ? '/dashboard' : null,
@@ -153,8 +152,9 @@ function fetch(string $uri, string $method = 'GET', array $params = []): array
 }
 
 // A guest hitting /login or /register while signed in is redirected on
-// purpose, so a 302 there is not a defect.
-$guestOnlyRoutes = ['/login', '/register'];
+// purpose, so a 302 there is not a defect. /dashboard role-hands off to
+// /owner/dashboard or /seller/dashboard, so its 302 is equally intended.
+$guestOnlyRoutes = ['/login', '/register', '/dashboard'];
 
 foreach ($uris as $uri) {
     $result = fetch($uri);

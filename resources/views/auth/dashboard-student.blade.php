@@ -4,16 +4,53 @@
 
 @section('content')
 <div class="container-page py-12">
-    <div class="flex items-center justify-between">
+    <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
             <span class="badge badge-brand mb-2">Mahasiswa / Pencari Kos</span>
             <h1 class="heading-xl">Dashboard Mahasiswa</h1>
-            <p class="text-ink-500 mt-1">Kelola pengajuan booking dan riwayat pembelian barang thriftmu di sini.</p>
+            <p class="text-ink-500 mt-1">Kelola pengajuan booking kos dan riwayat pembelian barang thrift kamu.</p>
         </div>
         <form method="POST" action="{{ route('logout') }}">
             @csrf
             <button type="submit" class="btn btn-md btn-white">Keluar</button>
         </form>
+    </div>
+
+    {{-- Stats Row --}}
+    <div class="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        <div class="card p-5">
+            <div class="flex items-center gap-3">
+                <span class="grid size-10 place-items-center rounded-2xl bg-brand-50 text-brand-600">
+                    <x-ui.icon name="building-office-2" class="size-5" />
+                </span>
+                <div>
+                    <p class="text-xs font-semibold text-ink-400">Total Booking</p>
+                    <p class="font-display text-2xl font-extrabold text-ink-900">{{ auth()->user()->bookings()->count() }}</p>
+                </div>
+            </div>
+        </div>
+        <div class="card p-5">
+            <div class="flex items-center gap-3">
+                <span class="grid size-10 place-items-center rounded-2xl bg-accent-50 text-accent-600">
+                    <x-ui.icon name="tag" class="size-5" />
+                </span>
+                <div>
+                    <p class="text-xs font-semibold text-ink-400">Pembelian Thrift</p>
+                    <p class="font-display text-2xl font-extrabold text-ink-900">{{ auth()->user()->purchases()->count() }}</p>
+                </div>
+            </div>
+        </div>
+        <div class="card p-5">
+            <div class="flex items-center gap-3">
+                <span class="grid size-10 place-items-center rounded-2xl bg-violet-50 text-violet-600">
+                    <x-ui.icon name="chat-bubble-oval-left" class="size-5" />
+                </span>
+                <div>
+                    <p class="text-xs font-semibold text-ink-400">Pesan Aktif</p>
+                    <p class="font-display text-2xl font-extrabold text-ink-900">Chat</p>
+                </div>
+            </div>
+        </div>
     </div>
 
     <div class="mt-8 grid gap-6 md:grid-cols-2">

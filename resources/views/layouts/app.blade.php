@@ -56,6 +56,25 @@
 
     @push('scripts')
     <script>
+        window.koskuyToast = (message) => {
+            let toast = document.getElementById('koskuy-toast');
+
+            if (!toast) {
+                toast = document.createElement('div');
+                toast.id = 'koskuy-toast';
+                toast.className = 'fixed bottom-24 left-1/2 z-90 -translate-x-1/2 rounded-full bg-ink-950 px-5 py-3 text-sm font-semibold text-white shadow-lift transition-opacity duration-300 opacity-0';
+                document.body.appendChild(toast);
+            }
+
+            toast.textContent = message;
+            toast.style.opacity = '1';
+
+            clearTimeout(window.__koskuyToastTimer);
+            window.__koskuyToastTimer = setTimeout(() => {
+                toast.style.opacity = '0';
+            }, 2600);
+        };
+
         window.startChat = async (type, id, ownerId) => {
             const res = await fetch('{{ url('/messages/start') }}', {
                 method: 'POST',
@@ -66,7 +85,7 @@
                 body: JSON.stringify({ listing_type: type, listing_id: id, owner_id: ownerId })
             });
             if (res.redirected) window.location.href = res.url;
-            else alert('Gagal memulai chat.');
+            else window.koskuyToast('Gagal memulai chat. Coba login ulang.');
         };
     </script>
     @endpush

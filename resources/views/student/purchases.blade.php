@@ -24,7 +24,12 @@
                     <td class="px-4 py-3"><span class="px-2 py-1 rounded text-xs bg-red-100 text-red-700">Terjual</span></td>
                 </tr>
             @empty
-                <tr><td colspan="5" class="px-4 py-8 text-center text-gray-400">Belum ada pembelian.</td></tr>
+                <tr><td colspan="5" class="p-0"><x.partials.empty-state
+                    icon="tag"
+                    title="Belum ada pembelian"
+                    description="Barang thrift yang kamu beli akan tersimpan di riwayat ini."
+                    actionLabel="Jelajahi Thrift"
+                    :actionHref="route('thrift.index')" /></td></tr>
             @endforelse
         </tbody>
     </table>

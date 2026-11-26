@@ -54,12 +54,8 @@
                                     :class="tab === item.id ? 'bg-white text-brand-700 shadow-soft' : 'text-ink-500 hover:text-ink-800'"
                                 >
                                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="size-4.5">
-                                        <template x-if="item.icon === 'building-office-2'">
-                                            <path d="M6 21.75h9.75a.75.75 0 001.5 0V3a.75.75 0 00-.75-.75H6a.75.75 0 00-.75.75v18.75zm0 0v-7.5A.75.75 0 016 13.5h3a.75.75 0 01.75.75v7.5m-3.75 0H3.375m17.25 0h-2.625m0 0h1.5m-1.5 0V3.75m1.5 0V3a.75.75 0 00-.75-.75H14.25a.75.75 0 00-.75.75v18.75M16.5 9h1.5m-1.5 3H18m-3 3h1.5m-1.5 3H18"/>
-                                        </template>
-                                        <template x-if="item.icon === 'tag'">
-                                            <path d="M9.568 3H5.25A2.25 2.25 0 003 5.25v4.318c0 .597.237 1.17.659 1.591l9.581 9.581c.699.699 1.78.872 2.607.33a18.095 18.095 0 005.223-5.223c.542-.827.369-1.908-.33-2.607L11.16 3.66A2.25 2.25 0 009.568 3Z"/>
-                                        </template>
+                                        <path x-show="item.icon === 'building-office-2'" d="M6 21.75h9.75a.75.75 0 001.5 0V3a.75.75 0 00-.75-.75H6a.75.75 0 00-.75.75v18.75zm0 0v-7.5A.75.75 0 016 13.5h3a.75.75 0 01.75.75v7.5m-3.75 0H3.375m17.25 0h-2.625m0 0h1.5m-1.5 0V3.75m1.5 0V3a.75.75 0 00-.75-.75H14.25a.75.75 0 00-.75.75v18.75M16.5 9h1.5m-1.5 3H18m-3 3h1.5m-1.5 3H18"/>
+                                        <path x-show="item.icon === 'tag'" d="M9.568 3H5.25A2.25 2.25 0 003 5.25v4.318c0 .597.237 1.17.659 1.591l9.581 9.581c.699.699 1.78.872 2.607.33a18.095 18.095 0 005.223-5.223c.542-.827.369-1.908-.33-2.607L11.16 3.66A2.25 2.25 0 009.568 3Z"/>
                                     </svg>
                                     <span x-text="item.label"></span>
                                 </button>
@@ -513,64 +509,12 @@
         </div>
     </section>
 
-    {{-- ========================= TESTIMONI ========================= --}}
+    {{-- ========================= TESTIMONI (DINONAKTIFKAN SEMENTARA) ========================= --}}
+    {{--
     <section class="section bg-ink-50/60" id="testimoni">
-        <div class="container-page">
-            <x-ui.section-heading
-                eyebrow="Suara mahasiswa"
-                title="Cerita dari <span class='gradient-text'>pengguna</span>"
-                description="Tiga momen kecil yang membuat kami terus mengembangkan KosKuy."
-            />
-
-            <div class="mt-10 flex justify-center">
-                <span class="badge-sun">
-                    <x-ui.icon name="information-circle" class="size-3.5" />
-                    Contoh tampilan — ganti dengan testimoni asli sebelum kampanye resmi
-                </span>
-            </div>
-
-            <div class="mt-8 grid gap-6 md:grid-cols-3">
-                @foreach ([
-                    [
-                        'name' => 'Rangga P.',
-                        'meta' => 'Mahasiswa Teknik, Universitas Tidar',
-                        'text' => 'Dulu saya keliling komplek selama dua minggu hanya untuk cari kos. Di KosKuy saya bisa membandingkan tiga listing dalam satu malam, lalu chat pemilik lewat WhatsApp.',
-                        'tone' => 'bg-brand-600',
-                    ],
-                    [
-                        'name' => 'Salsabila N.',
-                        'meta' => 'Mahasiswa Sistem Informasi, Universitas Amikom Magelang',
-                        'text' => 'Buku dan kipas bekas yang saya cari akhirnya ketemu di sini. Kondisinya ditulis jujur oleh penjualnya, jadi tidak wasting time untuk nego asal-nego.',
-                        'tone' => 'bg-accent-600',
-                    ],
-                    [
-                        'name' => 'Pak Rudi',
-                        'meta' => 'Pemilik kos, 6 unit',
-                        'text' => 'Saya memasang enam kamar dalam seminggu tanpa biaya iklan. Mahasiswa baru bisa langsung chat saya kalau ada kamar kosong.',
-                        'tone' => 'bg-violet-600',
-                    ],
-                ] as $item)
-                    <figure class="reveal card card-hover relative flex flex-col p-7">
-                        <x-ui.icon name="sparkles" class="size-7 text-brand-200" />
-
-                        <blockquote class="mt-4 flex-1 text-[15px] leading-relaxed text-ink-600">
-                            {{ $item['text'] }}
-                        </blockquote>
-
-                        <figcaption class="mt-6 flex items-center gap-3 border-t border-ink-100 pt-5">
-                            <span class="grid size-11 shrink-0 place-items-center rounded-2xl text-sm font-bold text-white {{ $item['tone'] }}">
-                                {{ initials($item['name']) }}
-                            </span>
-                            <span class="min-w-0">
-                                <span class="block truncate text-sm font-bold text-ink-900">{{ $item['name'] }}</span>
-                                <span class="block truncate text-xs text-ink-400">{{ $item['meta'] }}</span>
-                            </span>
-                        </figcaption>
-                    </figure>
-                @endforeach
-            </div>
-        </div>
+        ...
     </section>
+    --}}
 
     {{-- ========================= FAQ ========================= --}}
     <section class="section bg-white" id="faq">
